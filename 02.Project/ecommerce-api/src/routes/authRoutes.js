@@ -26,9 +26,9 @@ router.post('/register',
     body('role')
       .optional()
       .isIn(['admin', 'customer', 'guest']).withMessage('Role must to be admin,customer or guest'),
-    body('avatar')
-      .optional()
-      .isURL().withMessage('Avatar must be a valid URL')
+    // body('avatar')
+    //   .optional()
+    //   .isURL().withMessage('Avatar must be a valid URL')
   ]
   , validate, register);
 

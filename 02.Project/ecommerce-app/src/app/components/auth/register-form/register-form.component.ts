@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-register-form',
@@ -14,11 +15,11 @@ export class RegisterFormComponent {
   fb = inject(FormBuilder);
   registerForm: FormGroup;
 
-  constructor(){
+  constructor(private authService: AuthService){
     this.registerForm = this.fb.group({
       displayName: ['', [Validators.required]],
       email: ['', [Validators.email, Validators.required]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, /*Validators.pattern(/^\d{10}$/),*/ this.phoneValidator()]],
       dateOfBirth: ['', [Validators.required]],
       avatar: [''],
       password:['', [Validators.required]],
@@ -50,9 +51,20 @@ export class RegisterFormComponent {
     }
   }
 
-  handleSubmit(){
-    
-    console.log(this.registerForm.value);
+  phoneValidator():ValidatorFn{
+    return (formControl: AbstractControl): ValidationErrors | null =>{
+      const phoneValue = formControl.value;
+      console.log(phoneValue.length);
+      console.log(Number.isNaN(+phoneValue));
+      if (phoneValue.length!==10 || Number.isNaN(+phoneValue)) {
+        return { invalid_phone: true}
+      }
+      return null;
+    }
+  }
 
+  handleSubmit(){
+    console.log(this.registerForm.value);
+    this.authService.register(this.registerForm.value);
   }
 }

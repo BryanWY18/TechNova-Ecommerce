@@ -11,6 +11,7 @@ export type decodedToken = {
   providedIn: 'root',
 })
 export class AuthService {
+  baseUrl = 'http://localhost:3000/api';
   
   constructor(private httpClient: HttpClient) {}
   get token(): string | null {
@@ -24,7 +25,7 @@ export class AuthService {
 
 
   register(data: any) {
-    this.httpClient.post(``, data).subscribe({
+    this.httpClient.post(`${this.baseUrl}/auth/register`, data).subscribe({
       next: (res) => {
         console.log(res);
       },
