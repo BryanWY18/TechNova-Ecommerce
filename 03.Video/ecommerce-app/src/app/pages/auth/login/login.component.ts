@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
+import { UserStateService } from '../../../core/user-state.service';
 import { FormFieldComponent } from '../../../ui/form-field/form-field.component';
 import { InputComponent } from '../../../ui/input/input.component';
 import { ButtonComponent } from '../../../ui/button/button.component';
@@ -26,7 +27,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private userStateService: UserStateService
   ) {
     this.form = this.fb.nonNullable.group({
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
@@ -42,6 +44,7 @@ export class LoginComponent {
     const { email, password } = this.form.getRawValue();
     this.auth.login(email, password).subscribe({
       next: () => {
+        this.userStateService.loadUser();
         this.loading = false;
         this.router.navigateByUrl('/');
       },
