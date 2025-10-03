@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { FormFieldComponent } from "../../shared/form-field/form-field.component";
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormFieldComponent],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css',
 })
@@ -18,7 +20,7 @@ export class RegisterFormComponent {
   constructor(private authService: AuthService){
     this.registerForm = this.fb.group({
       displayName: ['', [Validators.required]],
-      email: ['', [Validators.email, Validators.required]],
+      email: ['', [Validators.email, Validators.required],[this.emailAsycValidator()]],
       phone: ['', [Validators.required, /*Validators.pattern(/^\d{10}$/),*/ this.phoneValidator()]],
       dateOfBirth: ['', [Validators.required]],
       avatar: [''],
@@ -60,6 +62,21 @@ export class RegisterFormComponent {
         return { invalid_phone: true}
       }
       return null;
+    }
+  }
+
+  emailAsycValidator(): AsyncValidatorFn{
+    // const auth = inject(AuthService);
+    return (control: AbstractControl)=>{
+      if (!control.value) {
+        return of(null);
+      }
+      console.log(control.value);
+      return this.authService.checkEmailExist(control.value).pipe(
+        debounceTime(500),
+        switchMap((exist)=>(exist? of({emailTaken: true}): of(null))),
+        catchError(()=>of({cantFetch:true}))
+      )
     }
   }
 

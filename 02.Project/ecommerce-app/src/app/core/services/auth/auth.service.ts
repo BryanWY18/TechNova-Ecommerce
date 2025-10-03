@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { map, Observable } from 'rxjs';
 
 export type decodedToken = {
   userId: string;
@@ -33,5 +34,11 @@ export class AuthService {
         console.log(error);
       },
     });
+  }
+
+  checkEmailExist(email:string): Observable<boolean>{
+    return this.httpClient.get<{exists:boolean}>(`${this.baseUrl}/auth/check-email`, {params:{email}}).pipe(
+      map((res)=> res.exists)
+    );
   }
 }

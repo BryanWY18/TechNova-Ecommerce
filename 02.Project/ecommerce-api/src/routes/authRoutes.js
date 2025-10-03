@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { register, login } from '../controllers/authController.js';
+import { register, login, checkEmailAlredyRegistered, refreshToken } from '../controllers/authController.js';
 import validate from '../middlewares/validation.js';
 
 const router = express.Router();

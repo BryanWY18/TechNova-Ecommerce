@@ -64,6 +64,7 @@ async function login(req, res, next) {
 const checkEmailAlredyRegistered = async (req, res, next) => {
   try {
     const { email } = req.query;
+    console.log(email);
     const user = await User.findOne({email});
     res.status(200).json({ exists: !!user });
   } catch (error) {
