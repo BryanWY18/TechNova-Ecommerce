@@ -61,7 +61,32 @@ async function login(req, res, next) {
     next(error);
   }
 }
+const checkEmailAlredyRegistered = async (req, res, next) => {
+  try {
+    const { email } = req.query;
+    const user = await User.findOne({email});
+    res.status(200).json({ exists: !!user });
+  } catch (error) {
+    next(error)
+  }
+};
+const refreshToken = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.userId);
+    if (user) {
+      const newToken = generateToken(user._id, user.name, user.role);
 
-export { register, login };
+      res.status(200).json({ token: newToken });
+    } else {
+      res.status(401).json({ message: 'Invalid refresh token' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { register, login,checkEmailAlredyRegistered, refreshToken };
 
 

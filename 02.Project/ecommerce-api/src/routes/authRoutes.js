@@ -41,4 +41,8 @@ router.post('/login', [
     .notEmpty().withMessage('Password is required')
 ], validate, login);
 
+router.get('/check-email', checkEmailAlredyRegistered);
+
+router.post('/refresh-token', refreshToken);
+
 export default router;
