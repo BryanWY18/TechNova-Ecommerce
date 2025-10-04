@@ -79,7 +79,7 @@ Crear el archivo `src/app/core/types/ShippingAddress.ts`:
 - [ ] Rechaza direcciones muy cortas
 - [ ] Permite direcciones con números y caracteres especiales
 
-### Validación de Código Postal
+### Validación de Código Postalm
 - [ ] Acepta formato: `12345`
 - [ ] Rechaza formatos inválidos: `abc123`, `1234567890`
 - [ ] Muestra mensaje de error apropiado
