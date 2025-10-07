@@ -1,12 +1,16 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 //import { ProductService } from '../../core/product.service';
 import { ThemeService } from '../../core/theme.service';
 import { UserStateService } from '../../core/user-state.service';
 import { User } from '../../core/profile.service';
+// NgRx Imports
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/auth/auth.actions';
+import { selectUser } from '../../store/auth/auth.selectors';
 
 // UI Components
 import { SearchBarComponent } from '../../ui/search-bar/search-bar.component';
@@ -23,47 +27,55 @@ interface Category {
 }
 
 @Component({
-    selector: 'app-layout',
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        RouterLink,
-        SearchBarComponent,
-        DropdownComponent,
-        CartButtonComponent,
-        ButtonComponent,
-        IconComponent,
-        ThemeToggleComponent
-    ],
-    templateUrl: './layout.component.html',
-    styleUrl: './layout.component.css'
+  selector: 'app-layout',
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    SearchBarComponent,
+    DropdownComponent,
+    CartButtonComponent,
+    ButtonComponent,
+    IconComponent,
+    ThemeToggleComponent
+  ],
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.css'
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   searchQuery = '';
   categories: Category[] = [{ _id: '12', name: 'Todo', description: 'Todo' }];
-  user: User | null = null;
+  //user: User | null = null;
   showUserMenu = false;
   showCategoriesMenu = false;
   showMobileMenu = false;
 
   private userSubscription: Subscription = new Subscription();
 
+  user$: Observable<User | null>;
+
   constructor(
     private authService: AuthService,
     //private productService: ProductService,
     private router: Router,
     private themeService: ThemeService,
-    private userStateService: UserStateService
-  ) { }
+    private userStateService: UserStateService,
+    private store: Store
+  ) {
+    this.user$ = this.store.select(selectUser);
+  }
 
   ngOnInit() {
     // Initialize theme
     this.themeService.init();
     //this.loadCategories();
+
     //Suscribirse al estado reactivo del usuario
-    this.subscribeToUserState();
+    //this.subscribeToUserState();
     //Cargar el usuario inicial
-    this.userStateService.loadUser();
+    //this.userStateService.loadUser();
+
+    this.store.dispatch(AuthActions.loadUser());
 
     // Check initial screen size
     this.checkScreenSize();
@@ -71,7 +83,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Cleanup if needed
-    this.userSubscription.unsubscribe();
+    // this.userSubscription.unsubscribe();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -109,17 +121,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
   /**
    * Suscribirse al estado reactivo del usuario
    */
-  private subscribeToUserState() {
-    this.userSubscription = this.userStateService.user$.subscribe({
-      next: (user) => {
-        this.user = user;
-        console.log('Estado del usuario actualizado en el Layout', user);
-      },
-      error: (error) => {
-        console.error('Error en la suscripción del usuario', error);
-      }
-    })
-  }
+  // private subscribeToUserState() {
+  //   this.userSubscription = this.userStateService.user$.subscribe({
+  //     next: (user) => {
+  //       this.user = user;
+  //       console.log('Estado del usuario actualizado en el Layout', user);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error en la suscripción del usuario', error);
+  //     }
+  //   })
+  // }
 
   onSearch(query: string) {
     if (query.trim()) {
@@ -145,8 +157,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
-    this.userStateService.clearUser();
+    //this.authService.logout();
+    //this.userStateService.clearUser();
+    this.store.dispatch(AuthActions.logout());
     this.showUserMenu = false;
     this.router.navigate(['/']);
   }

@@ -56,9 +56,8 @@
         <!-- Botón de usuario -->
         <ui-dropdown menuClass="right" [isOpen]="showUserMenu" (openChange)="showUserMenu = $event">
 
-          <div slot="trigger" class="user-info"
-            [attr.aria-label]="user ? 'Menú de usuario: ' + user.displayName : 'Iniciar sesión o crear cuenta'">
-            @if (user) {
+          <div slot="trigger" class="user-info">
+            @if (user$ | async; as user) {
             <span class="user-greeting">Hola, {{ user.displayName }}</span>
             <span class="user-account">Cuenta y Listas</span>
             } @else {
@@ -68,7 +67,7 @@
           </div>
 
           <div slot="content" role="menu">
-            @if (!user) {
+            @if (!(user$ | async)) {
             <!-- Usuario no logueado -->
             <div class="auth-section" role="group" aria-labelledby="auth-heading">
               <h3 id="auth-heading" class="sr-only">Opciones de autenticación</h3>
@@ -90,10 +89,10 @@
             <hr class="dropdown-divider" role="separator">
             }
 
-            @if (user) {
+            @if (user$ | async) {
             <!-- Usuario logueado -->
             <div class="user-links">
-              <a href="#" class="dropdown-link">Tu cuenta</a>
+              <a routerLink="/profile" class="dropdown-link" (click)="closeMenus()">Tu cuenta</a>
               <a href="#" class="dropdown-link">Tus pedidos</a>
               <a href="#" class="dropdown-link">Lista de deseos</a>
               <div class="dropdown-divider"></div>
@@ -157,12 +156,12 @@
   <div class="mobile-menu-content">
     <!-- User Section Mobile -->
     <div class="mobile-user-section">
-      @if (user) {
+      @if (user$ | async; as user) {
       <div class="mobile-user-info">
         <span class="mobile-user-name">Hola, {{ user.displayName }}</span>
       </div>
       <div class="mobile-user-links">
-        <a href="#" class="mobile-menu-link" (click)="closeMobileMenu()">Tu cuenta</a>
+        <a routerLink="/profile" class="dropdown-link" (click)="closeMobileMenu()">Tu cuenta</a>
         <a href="#" class="mobile-menu-link" (click)="closeMobileMenu()">Tus pedidos</a>
         <a href="#" class="mobile-menu-link" (click)="closeMobileMenu()">Lista de deseos</a>
         <ui-button variant="danger" (click)="logout(); closeMobileMenu()">
