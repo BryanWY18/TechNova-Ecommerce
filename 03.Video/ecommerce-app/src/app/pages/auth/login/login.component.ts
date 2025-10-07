@@ -13,11 +13,10 @@ type LoginForm = FormGroup<{
 }>;
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+    selector: 'app-login',
+    imports: [ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent {
   loading = false;

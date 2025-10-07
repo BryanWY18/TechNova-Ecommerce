@@ -23,21 +23,20 @@ interface Category {
 }
 
 @Component({
-  selector: 'app-layout',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    RouterLink,
-    SearchBarComponent,
-    DropdownComponent,
-    CartButtonComponent,
-    ButtonComponent,
-    IconComponent,
-    ThemeToggleComponent
-  ],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+    selector: 'app-layout',
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        RouterLink,
+        SearchBarComponent,
+        DropdownComponent,
+        CartButtonComponent,
+        ButtonComponent,
+        IconComponent,
+        ThemeToggleComponent
+    ],
+    templateUrl: './layout.component.html',
+    styleUrl: './layout.component.css'
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   searchQuery = '';
