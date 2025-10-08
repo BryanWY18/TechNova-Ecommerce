@@ -1,4 +1,4 @@
-<div class="fixed top-24 z-20 space-y-3 w-80">
+<div class="fixed top-24 right-4 z-20 space-y-3 w-80">
   <div class="flex justify-end mb-2">
     <button
       class="bg-gray-600/80 text-white px-3 py-1 rounded-lg text-sm hover:bg-gray-700/80"
@@ -6,21 +6,44 @@
       historial
     </button>
   </div>
-  <div></div>
-  @if (toast$ | async; as toasts) {
-  
-    @for (toast of toasts; track $index) {
-        <div
-            class=" rounded-xl shadow-lg border border-white/20 p-4
-                text-white transform transition-all duration-300 hover:scale-105
-            "
-        >
-        <div class="flex items-center justify-between">
-            <p class="font-medium text-sm">
-                {{toast.text}}
-            </p>
-        </div>
-        </div>
+  <div
+    class="bg-gray-800/90 rounded-xl p-4 max-h-96 overflow-y-auto border-gray-600"
+  >
+    @if (toastsHistory$ | async; as history) {
+    <div class="space-y-2">
+      @for (toast of history; track $index) {
+      <div
+        class="p-2 rounded border border-gray-600 text-xs"
+        [ngClass]="{
+          'bg-green-600/30 text-green-50 text-sm': toast.type === 'success',
+          'bg-red-600/30 text-red-50 text-sm': toast.type === 'error'
+        }"
+      >
+        <p>{{ toast.text }}</p>
+      </div>
+      }@empty {
+        <p class="text-gray-400 text-sm text-center p-4">
+            No hay notificaciones
+        </p>
+      }
+
+    </div>
+
     }
-  }
+  </div>
+  @if (toast$ | async; as toasts) { @for (toast of toasts; track $index) {
+  <div
+    class="rounded-xl shadow-lg border border-white/20 p-4 text-white transform transition-all duration-300 hover:scale-105"
+    [ngClass]="{
+      'bg-green-600 text-green-50 text-sm': toast.type === 'success',
+      'bg-red-600 text-red-50 text-sm': toast.type === 'error'
+    }"
+  >
+    <div class="flex items-center justify-between">
+      <p class="font-medium text-sm">
+        {{ toast.text }}
+      </p>
+    </div>
+  </div>
+  } }
 </div>
