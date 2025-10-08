@@ -1,1 +1,26 @@
-<p>toast works!</p>
+<div class="fixed top-24 z-20 space-y-3 w-80">
+  <div class="flex justify-end mb-2">
+    <button
+      class="bg-gray-600/80 text-white px-3 py-1 rounded-lg text-sm hover:bg-gray-700/80"
+    >
+      historial
+    </button>
+  </div>
+  <div></div>
+  @if (toast$ | async; as toasts) {
+  
+    @for (toast of toasts; track $index) {
+        <div
+            class=" rounded-xl shadow-lg border border-white/20 p-4
+                text-white transform transition-all duration-300 hover:scale-105
+            "
+        >
+        <div class="flex items-center justify-between">
+            <p class="font-medium text-sm">
+                {{toast.text}}
+            </p>
+        </div>
+        </div>
+    }
+  }
+</div>

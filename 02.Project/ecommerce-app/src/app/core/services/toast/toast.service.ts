@@ -45,7 +45,7 @@ export class ToastService {
     this.toastSubject.next(update);
   }
 
-  succes(text: string, duration = 5000) {
+  success(text: string, duration = 5000) {
     this.show({ text, type: 'success', duration });
   }
   error(text: string, duration = 5000) {
