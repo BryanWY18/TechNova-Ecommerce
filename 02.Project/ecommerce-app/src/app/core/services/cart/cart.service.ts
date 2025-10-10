@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Cart } from '../../types/Cart';
 import { AuthService } from '../auth/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastService } from '../toast/toast.service';
 
 @Injectable({
@@ -22,6 +22,16 @@ export class CartService {
   ) { 
     this.loadCart();
   } 
+
+  get headers(){
+    const token = this.authService.token ?? '';
+    const headers = new HttpHeaders({
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+
+    return headers;
+  }
 
   private getUserId(): string | null {
     const userId = this.authService.decodedToken?.userId;
@@ -43,7 +53,7 @@ export class CartService {
     })
   }
   getCartByUser(userId:string):Observable<Cart | null>{
-    return this.httpClient.get<Cart>(`${this.baseUrl}/user/${userId}`).pipe(
+    return this.httpClient.get<Cart>(`${this.baseUrl}/user/${userId}`, {headers: this.headers} ).pipe(
       catchError((error)=>{
         tap((data)=>{
           console.log(data);
@@ -68,7 +78,7 @@ export class CartService {
       productId,
       quantity
     };
-    return this.httpClient.post(`${this.baseUrl}/add-products`, payload).pipe(
+    return this.httpClient.post(`${this.baseUrl}/add-product`, payload, {headers: this.headers}).pipe(
       switchMap(data=>{
         console.log(data);
         return this.getCartByUser(userId);

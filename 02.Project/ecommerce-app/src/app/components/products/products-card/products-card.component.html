@@ -63,7 +63,8 @@
             ? 'bg-gray-300 text-gray-500'
             : 'bg-green-600 hover:bg-green-700 text-white'
         "
-        class="px-4 py-2 rounded-md transition-colors"
+        class="px-4 py-2 rounded-md transition-colors disabled:bg-gray-300"
+        [disabled]="loading"
         (click)="addToCart()"
       >
         🛒

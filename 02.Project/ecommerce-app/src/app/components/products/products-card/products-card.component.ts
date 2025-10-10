@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminDirective } from '../../../core/directives/admin.directive';
 import { OfferDirective } from '../../../core/directives/offer/offer.directive';
-import { ToastService } from '../../../core/services/toast/toast.service';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-products-card',
@@ -15,11 +15,16 @@ import { ToastService } from '../../../core/services/toast/toast.service';
 })
 export class ProductsCardComponent {
   @Input() product!:Product;
-  constructor(private toastService: ToastService){}
+  constructor(private cartService: CartService){}
+  loading:boolean = false;
 
 
   addToCart(){
-    console.log('**')
-    this.toastService.success(`${this.product.name} agregado a tu carrito`);
+    this.loading = true
+    console.log(this.loading);
+    this.cartService.addToCart(this.product._id).subscribe({
+      next:()=> this.loading = false,
+      error:()=> this.loading = false,
+    });
   }
 }

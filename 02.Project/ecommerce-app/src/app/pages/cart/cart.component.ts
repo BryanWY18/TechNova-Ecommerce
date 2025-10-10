@@ -1,12 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CartService } from '../../core/services/cart/cart.service';
+import { Observable, of } from 'rxjs';
+import { Cart } from '../../core/types/Cart';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
-  imports: [],
+  imports: [CommonModule, RouterLink],
   standalone: true,
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
-export class CartComponent {
+export class CartComponent implements OnInit{
+
+  cart$: Observable<Cart | null> = of(null);
+  constructor(private cartService:CartService){}
+
+  ngOnInit(): void {
+    this.cart$ = this.cartService.cart$; 
+  }
 
 }

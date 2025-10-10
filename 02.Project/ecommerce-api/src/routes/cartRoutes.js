@@ -15,12 +15,13 @@ const router = express.Router();
 
 // Obtener todos los carritos (admin)
 router.get('/cart', authMiddleware, isAdmin, getCarts);
+// Obtener carrito por usuario
+router.get('/cart/user/:id', authMiddleware, getCartByUser);
 
 // Obtener carrito por ID
 router.get('/cart/:id', authMiddleware, isAdmin, getCartById);
 
-// Obtener carrito por usuario
-router.get('/cart/user/:id', authMiddleware, getCartByUser);
+
 
 // Crear nuevo carrito
 router.post('/cart', authMiddleware, createCart);
