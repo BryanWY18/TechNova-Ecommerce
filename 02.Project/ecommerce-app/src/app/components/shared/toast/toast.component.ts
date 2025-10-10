@@ -13,30 +13,25 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.css',
 })
-export class ToastComponent implements OnInit, OnDestroy {
-  toast$: Observable<ToastMessage[]> = of([]);
-  toastsHistory$: Observable<ToastMessage[]> = of([]);
-  suscription!: Subscription
+export class ToastComponent implements OnInit {
 
-  destroyRef= inject(DestroyRef)
-  
-  constructor(private toastService: ToastService) {}
+  toasts$: Observable<ToastMessage[]> = of([]);
+  toastHistory$: Observable<ToastMessage[]> = of([]);
+  showHistory = false; 
+
+  constructor(private toast: ToastService) {}
   ngOnInit(): void {
-    this.toast$ = this.toastService.toast$;
-    this.suscription = this.toast$.subscribe();
-    // this.toast$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
-    /// 1,2,53,8,6,7,8
-    // [1,2]
-    this.toastsHistory$ = this.toastService.toastHistory$.pipe(
-     scan((acc: ToastMessage[], current: ToastMessage)=>{
-      const update = [...acc, current]
-      return update.slice(-10)
-     }, []) 
-    )
+    this.toasts$ = this.toast.toast$;
     
+    this.toastHistory$ = this.toast.toastHistory$.pipe(
+      scan((acc: ToastMessage[], current: ToastMessage) => {
+        const updated = [...acc, current];
+        return updated.slice(-10);
+      }, [])
+    );
   }
-  
-  ngOnDestroy(): void {
-    this.suscription.unsubscribe();
+
+  toggleHistory() {
+    this.showHistory = !this.showHistory;
   }
 }
