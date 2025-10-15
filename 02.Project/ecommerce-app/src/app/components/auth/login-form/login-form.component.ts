@@ -13,29 +13,25 @@ import { FormFieldComponent } from "../../shared/form-field/form-field.component
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
+  fb = inject(FormBuilder);
+  loginForm: FormGroup;
 
-  fb=inject(FormBuilder);
-
-  loginForm:FormGroup;
-
-  constructor(private validation:FormErrorService, private authService:AuthService){
-    this.loginForm=this.fb.group({
-      email:['',[Validators.required, Validators.email]],
-      password:['',Validators.required]
+  constructor(private validation: FormErrorService, private authService:AuthService){
+    this.loginForm = this.fb.group({
+      email:['', [Validators.required, Validators.email]], 
+      password:['', Validators.required]
     })
   }
-    
   getErrorMessage(fieldName:string){
-    const loginLabels={
-      email:'email',
-      password:'contraseña'
+    const loginLabels = {
+      email: 'email',
+      password: 'contraseña'
     }
-    return this.validation.getFieldError(this.loginForm,fieldName,loginLabels);
+    return this.validation.getFieldError(this.loginForm, fieldName, loginLabels)
   }
 
   handleSubmit(){
     console.log(this.loginForm.value);
     this.authService.login(this.loginForm.value);
   }
-
 }
