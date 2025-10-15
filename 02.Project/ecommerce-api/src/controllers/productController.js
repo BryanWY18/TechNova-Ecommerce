@@ -2,7 +2,9 @@ import Product from "../models/product.js";
 
 async function getProducts(req, res) {
   try {
+    
     const page = parseInt(req.query.page) || 1;
+    console.log(page)
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 

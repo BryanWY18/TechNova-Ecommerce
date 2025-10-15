@@ -7,9 +7,10 @@
     </span>
   </div>
   <div class="aspect-square bg-gray-100 flex items-center justify-center">
-    @if (product.imageUrl) {
+    @if (product.imagesUrl.length > 0) {
+
     <img
-      [src]="product.imageUrl"
+      [src]="product.imagesUrl[0]"
       [alt]="product.name"
       class="w-full h-full object-cover"
     />
@@ -43,7 +44,7 @@
     </p>
 
     <div class="mb-4">
-      <span class="text-xl font-bold text-gray-900">{{ product.price }}</span>
+      <span class="text-xl font-bold text-gray-900">{{ product.price | currency }}</span>
       <div class="text-xs text-gray-500 mt-1">Stock: {{ product.stock }}</div>
     </div>
 

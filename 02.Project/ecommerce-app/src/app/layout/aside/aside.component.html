@@ -56,7 +56,7 @@
     </div>
     <div class="flex-1 p-4 overflow-y-auto">
       @if (user) {
-        <app-side-menu [title]="`Willkommen ${user.displayName}`" [navRoutes]="authRoutes"></app-side-menu>
+        <app-side-menu [title]="`Bienvenido ${user.displayName}`" [navRoutes]="authRoutes"></app-side-menu>
       }@else {
         <app-side-menu [navRoutes]="notAuthRoutes"></app-side-menu>
       }

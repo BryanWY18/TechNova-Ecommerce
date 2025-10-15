@@ -3,16 +3,17 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ProductsService } from '../../../core/services/products/products.service';
 import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-search-products',
   standalone: true,
-  imports: [ReactiveFormsModule, AsyncPipe],
+  imports: [ReactiveFormsModule, AsyncPipe, RouterModule, RouterLink],
   templateUrl: './search-products.component.html',
   styleUrl: './search-products.component.css'
 })
 export class SearchProductsComponent implements OnInit{
-  
+
   searchProductForm = new FormGroup({
     q: new FormControl('', {nonNullable: true}), 
     minPrice: new FormControl(0, {nonNullable:true}),
@@ -39,11 +40,9 @@ export class SearchProductsComponent implements OnInit{
     switchMap((searchConfigObservable)=>this.productService.searchProducts(searchConfigObservable))
   )
 
-
-  constructor(private productService: ProductsService){}
+  constructor(private productService: ProductsService, public route: ActivatedRoute, public router: Router){}
   ngOnInit(): void {
     this.searchConfig$.subscribe({next: data => console.log(data)});
   }
-
 
 }

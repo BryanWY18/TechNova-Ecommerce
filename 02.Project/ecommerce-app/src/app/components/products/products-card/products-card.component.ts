@@ -15,6 +15,7 @@ import { CartService } from '../../../core/services/cart/cart.service';
 })
 export class ProductsCardComponent {
   @Input() product!:Product;
+  
   constructor(private cartService: CartService){}
   loading:boolean = false;
 

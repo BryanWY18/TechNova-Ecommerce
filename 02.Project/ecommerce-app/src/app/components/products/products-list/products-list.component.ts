@@ -13,17 +13,25 @@ import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
   styleUrl: './products-list.component.css'
 })
 export class ProductsListComponent implements OnInit{
-  productResponse!:ProductResponse;
+  productResponse: ProductResponse = {
+  products: [],
+  pagination: {
+    currentPage: 1,
+    totalPages: 0,
+    totalResults: 0,
+    hasNext: false,
+    hasPrev: false
+  }
+};
 
   constructor(private productsService: ProductsService){}
   ngOnInit(): void {
     this.getProducts();
   }
 
-  getProducts(page:number=1, limit:number=16){
+  getProducts(page:number=1, limit:number=8){
     this.productsService.getProducts(page, limit).subscribe({
       next:(data)=>{
-        console.log(data);
         this.productResponse = data;
       },
       error:(error)=>{
@@ -32,10 +40,10 @@ export class ProductsListComponent implements OnInit{
     })
   }
   onPageChange(event: PageEvent){
-    console.log(event);
-    this.getProducts(event.pageIndex, event.pageSize);
+  //  console.log(event);
+    this.getProducts(++event.pageIndex, event.pageSize);
   }
-
+ 
   get skeletonArray(): number[] {
     const expectedCount = this.productResponse?.products?.length || 8;
     return Array(expectedCount).fill(0);

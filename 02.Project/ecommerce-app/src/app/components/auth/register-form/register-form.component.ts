@@ -12,11 +12,12 @@ import {
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { FormFieldComponent } from '../../shared/form-field/form-field.component';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormFieldComponent],
+  imports: [ReactiveFormsModule, FormFieldComponent, RouterLink],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css',
 })
@@ -31,7 +32,7 @@ export class RegisterFormComponent {
       label: 'Nombre de usuario',
       fieldId: 'displayName',
       type: 'text',
-      placeholder: 'DarkTortilla',
+      placeholder: 'Nombre',
       required: true,
     },
     {

@@ -41,9 +41,9 @@
 </div>
 <div class="w-full">
     <mat-paginator
-        [length]="productResponse.pagination.totalResults"
-        [pageSize]="16"
-        [pageSizeOptions]="[16,32,64]"
+        [length]="productResponse?.pagination?.totalResults || 0"
+        [pageSize]="8"
+        [pageSizeOptions]="[8,16,32]"
         (page)="onPageChange($event)"
     ></mat-paginator>
 </div>

@@ -5,10 +5,10 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8">
         <div class="space-y-3 sm:space-y-4">
           <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg sm:rounded-xl overflow-hidden shadow-md">
-            @if (product.imageUrl) {
+            @if (product.imagesUrl) {
               <img
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                [src]="product.imageUrl"
+                [src]="product.imagesUrl[0]"
                 [alt]="product.name"
               />
             } @else {
@@ -37,11 +37,15 @@
 
         <div class="space-y-4 sm:space-y-6">
           
-          <div class="flex flex-wrap gap-2">
+          <div class="flex justify-between items-center flex-wrap gap-2">
             <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border border-blue-200/50">
               {{ product.category.name }}
             </span>
-            
+            <button [routerLink]="['/products']" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border border-blue-200/50 cursor-pointer transform hover:scale-[1.09] active:scale-[0.98]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
             @if (product.stock > 0 && product.stock <= 5) {
               <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 border border-orange-200/50">
                 ¡Últimas {{ product.stock }}!

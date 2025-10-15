@@ -19,14 +19,33 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  get decodedToken(): decodedToken | null {
-    const token = this.token;
-    return token ? jwtDecode<decodedToken>(token) : null;
+get decodedToken(): decodedToken | null {
+  const token = this.token;
+  if (!token || !token.includes('.')) {
+    console.warn('Token inválido o mal formado');
+    return null;
   }
-
+  try {
+    return jwtDecode<decodedToken>(token);
+  } catch (e) {
+    console.error('Error al decodificar token:', e);
+    return null;
+  }
+}
 
   register(data: any) {
     this.httpClient.post(`${this.baseUrl}/auth/register`, data).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+    login(data: any) {
+    this.httpClient.post(`${this.baseUrl}/auth/login`, data).subscribe({
       next: (res) => {
         console.log(res);
       },

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../core/types/Products';
 import { ProductsService } from '../../core/services/products/products.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -27,7 +27,7 @@ export class ProductDetailComponent implements OnInit{
         this.productService.getProductByID(id).subscribe({
           next:(product)=>{
             this.product = product;
-            console.log(product)
+            console.log(product.imagesUrl)
           },
           error: (error)=>{
             this.product = null;
