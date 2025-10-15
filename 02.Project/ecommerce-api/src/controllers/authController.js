@@ -5,9 +5,14 @@ import User from '../models/user.js';
 const generateToken = (userId, displayName, role) => {
   return jwt.sign({ userId, displayName, role },
     process.env.JWT_SECRET,
-    { expiresIn: '365d' }
+    { expiresIn: '1m' }
   )
 }
+
+const generateRefreshToken = (userId) => {
+  const refreshToken = jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  return { token: refreshToken, userId };
+};
 
 const generatePassword = async (password) => {
   const saltRounds = 10;
@@ -55,7 +60,8 @@ async function login(req, res, next) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     const token = generateToken(userExist._id, userExist.displayName, userExist.role);
-    res.status(200).json({ token });
+    const refreshToken = generateRefreshToken(userExist._id);
+    res.status(200).json({ token, refreshToken:refreshToken.token });
   } catch (error) {
     console.log(error);
     next(error);

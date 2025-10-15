@@ -36,6 +36,18 @@ export class AuthService {
     });
   }
 
+  login(data:any){
+    this.httpClient.post<any>(`${this.baseUrl}/auth/login`,data).subscribe({
+      next:(res)=>{
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('refreshToken', res.refreshToken);
+      },
+      error:(error)=>{
+        console.log(error);
+      }
+    })
+  }
+
   checkEmailExist(email:string): Observable<boolean>{
     return this.httpClient.get<{exists:boolean}>(`${this.baseUrl}/auth/check-email`, {params:{email}}).pipe(
       map((res)=> res.exists)

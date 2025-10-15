@@ -10,7 +10,28 @@
       </div>
 
       <div class="space-y-5">
-      
+        <app-form-field
+          label="correo electrónico"
+          fieldId="email"
+          type="email"
+          placeholder="tu@email"
+          [required]="true"
+          [errorMessage]="getErrorMessage('email')"
+          formControlName="email"
+        >
+        </app-form-field>
+        <app-form-field
+          label="contraseña"
+          fieldId="password"
+          type="password"
+          placeholder="*********"
+          [required]="true"
+          [errorMessage]="getErrorMessage('password')"
+          formControlName="password"
+        >
+        
+
+        </app-form-field>
       </div>
 
       <button

@@ -13,9 +13,25 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
+  fb = inject(FormBuilder);
+  loginForm: FormGroup;
 
+  constructor(private validation: FormErrorService, private authService:AuthService){
+    this.loginForm = this.fb.group({
+      email:['', [Validators.required, Validators.email]], 
+      password:['', Validators.required]
+    })
+  }
+  getErrorMessage(fieldName:string){
+    const loginLabels = {
+      email: 'email',
+      password: 'contraseña'
+    }
+    return this.validation.getFieldError(this.loginForm, fieldName, loginLabels)
+  }
 
-    
-  
-
+  handleSubmit(){
+    console.log(this.loginForm.value);
+    this.authService.login(this.loginForm.value);
+  }
 }
