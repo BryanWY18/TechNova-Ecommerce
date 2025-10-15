@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { map, Observable } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
+import { tokenSchema } from '../../types/Token';
 
 export type decodedToken = {
   userId: string;
@@ -17,6 +18,10 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {}
   get token(): string | null {
     return localStorage.getItem('token');
+  }
+
+  get refreshStorageToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
   get decodedToken(): decodedToken | null {
@@ -37,15 +42,28 @@ export class AuthService {
   }
 
   login(data:any){
-    this.httpClient.post<any>(`${this.baseUrl}/auth/login`,data).subscribe({
+    this.httpClient.post(`${this.baseUrl}/auth/login`,data).pipe(
+      map(data=>{
+        const response = tokenSchema.safeParse(data);
+        if (!response.success) {
+          console.log(response.error)
+          throw new Error(`${response.error}`)
+        }
+        return response.data;
+      })
+    ).subscribe({
       next:(res)=>{
         localStorage.setItem('token', res.token);
-        localStorage.setItem('refreshToken', res.refreshToken);
+        localStorage.setItem('refreshToken', res.refreshToken.toString());
       },
       error:(error)=>{
         console.log(error);
       }
     })
+  }
+
+  refreshToken(refreshToken:string){
+    return this.httpClient.post(`${this.baseUrl}/auth/refresh-token`, {token:refreshToken});
   }
 
   checkEmailExist(email:string): Observable<boolean>{
