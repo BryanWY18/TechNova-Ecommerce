@@ -3,7 +3,6 @@ import { LoginFormComponent } from "../../components/auth/login-form/login-form.
 
 @Component({
   selector: 'app-login',
-  standalone:true,
   imports: [LoginFormComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
