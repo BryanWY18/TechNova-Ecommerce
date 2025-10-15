@@ -45,9 +45,10 @@ get decodedToken(): decodedToken | null {
   }
 
     login(data: any) {
-    this.httpClient.post(`${this.baseUrl}/auth/login`, data).subscribe({
+    this.httpClient.post<any>(`${this.baseUrl}/auth/login`, data).subscribe({
       next: (res) => {
-        console.log(res);
+        localStorage.setItem('token',res.token);
+        localStorage.setItem('refreshToken',res.refreshToken);
       },
       error: (error) => {
         console.log(error);

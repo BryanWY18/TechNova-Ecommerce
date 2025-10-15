@@ -18,7 +18,7 @@ export class LoginFormComponent {
 
   loginForm:FormGroup;
 
-  constructor(private validation:FormErrorService){
+  constructor(private validation:FormErrorService, private authService:AuthService){
     this.loginForm=this.fb.group({
       email:['',[Validators.required, Validators.email]],
       password:['',Validators.required]
@@ -35,6 +35,7 @@ export class LoginFormComponent {
 
   handleSubmit(){
     console.log(this.loginForm.value);
+    this.authService.login(this.loginForm.value);
   }
 
 }
