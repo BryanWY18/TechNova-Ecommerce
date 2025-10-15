@@ -21,8 +21,11 @@ export const routes: Routes = [
   {
     path: 'register', loadComponent:()=> import('../app/pages/register/register.component').then(c=>c.RegisterComponent),
     title: 'registro'
-  }
-  ,
+  },
+  {
+    path: 'login', loadComponent: ()=> import('../app/pages/login/login.component').then(c=>c.LoginComponent),
+    title: 'login'
+  },
   {
     path: 'user/cart', loadComponent: () => import('../app/pages/cart/cart.component').then(c=>c.CartComponent),
     title: 'Carrito'
