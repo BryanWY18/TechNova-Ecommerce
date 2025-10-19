@@ -7,6 +7,7 @@ export type filters = {
   q: string;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
+  order?: asc | desc | null;
 };
 
 @Injectable({

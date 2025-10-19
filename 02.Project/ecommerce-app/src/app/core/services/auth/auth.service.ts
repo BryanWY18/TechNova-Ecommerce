@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { map, Observable, throwError, throwIfEmpty } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
 import { tokenSchema } from '../../types/Token';
-import { da } from 'zod/v4/locales';
 
 export type decodedToken = {
   userId: string;
@@ -21,11 +20,16 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  get refreshStorageToken():string | null {
-    return localStorage.getItem('refreshToken')
+  get refreshStorageToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
+  get decodedToken(): decodedToken | null {
+    const token = this.token;
+    return token ? jwtDecode<decodedToken>(token) : null;
+  }
 
+/*
 get decodedToken(): decodedToken | null {
   const token = this.token;
   if (!token || !token.includes('.')) {
@@ -39,6 +43,7 @@ get decodedToken(): decodedToken | null {
     return null;
   }
 }
+  */
 
   register(data: any) {
     this.httpClient.post(`${this.baseUrl}/auth/register`, data).subscribe({
@@ -55,7 +60,7 @@ get decodedToken(): decodedToken | null {
     this.httpClient.post(`${this.baseUrl}/auth/login`,data).pipe(
       map(data=>{
         const response = tokenSchema.safeParse(data);
-        if(!response.success){
+        if (!response.success) {
           console.log(response.error)
           throw new Error(`${response.error}`)
         }
@@ -64,7 +69,7 @@ get decodedToken(): decodedToken | null {
     ).subscribe({
       next:(res)=>{
         localStorage.setItem('token', res.token);
-        localStorage.setItem('refreshToken', res.refreshToken);
+        localStorage.setItem('refreshToken', res.refreshToken.toString());
       },
       error:(error)=>{
         console.log(error);
@@ -73,8 +78,7 @@ get decodedToken(): decodedToken | null {
   }
 
   refreshToken(refreshToken:string){
-    return this.httpClient.post(`${this.baseUrl}/auth/refresh-token`,
-      {token:refreshToken});
+    return this.httpClient.post(`${this.baseUrl}/auth/refresh-token`, {token:refreshToken});
   }
 
   checkEmailExist(email:string): Observable<boolean>{

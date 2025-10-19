@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { ProductsService } from '../../core/services/products/products.service';
 
 export type carouselImages =  {
     src: string;
@@ -29,11 +30,17 @@ export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
     { src: 'images/silksong.jpg', loaded: false, loading: false, alt: '' },
   ];
 
+  
   @Input() autoPlay: boolean = true;
   @Input() showIndicators: boolean = true;
   @Input() showControls: boolean = true;
   @Input() interval: number = 7000;
+  
+  constructor(public productsService:ProductsService){}
 
+  imagesByOrder:carouselImages = {
+  };
+  
   currentIndex = 0;
   private isDestroyed: boolean = false;
   private autoPlayInterval?: number;
