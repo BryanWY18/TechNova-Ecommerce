@@ -18,7 +18,7 @@ export interface Cart {
 
 export interface CartResponse {
   message: string;
-  cart: Cart;
+  cart: Cart | null; // ✅ Permitir que cart sea null como en la API
 }
 
 @Injectable({ providedIn: 'root' })
@@ -46,10 +46,16 @@ export class CartService {
       .get<CartResponse>(`${this.baseUrl}/cart/user/${userId}`)
       .pipe(
         tap((response) => {
+          // ✅ Manejar correctamente cuando cart es null
           this.cartSubject.next(response.cart);
+          if (response.cart) {
+            console.log('✅ Carrito obtenido:', response.cart);
+          } else {
+            console.log('📭 No hay carrito para este usuario');
+          }
         }),
         catchError((error) => {
-          console.error('Error obteniendo carrito:', error);
+          console.error('❌ Error obteniendo carrito:', error);
           return throwError(() => new Error('No se pudo obtener el carrito'));
         })
       );
@@ -73,9 +79,12 @@ export class CartService {
           console.log(`✅ Producto agregado al carrito: ${quantity}x`);
         }),
         catchError((error) => {
-          console.error('Error agregando al carrito:', error);
+          console.error('❌ Error agregando al carrito:', error);
+          // ✅ Mejor manejo de errores específicos de la API
           const message =
-            error?.error?.message || 'No se pudo agregar al carrito';
+            error?.error?.message ||
+            error?.message ||
+            'No se pudo agregar al carrito';
           return throwError(() => new Error(message));
         })
       );
@@ -111,9 +120,10 @@ export class CartService {
     return this.http.put<Cart>(`${this.baseUrl}/cart/${cartId}`, body).pipe(
       tap((updatedCart) => {
         this.cartSubject.next(updatedCart);
+        console.log('✅ Cantidad actualizada en el carrito');
       }),
       catchError((error) => {
-        console.error('Error actualizando carrito:', error);
+        console.error('❌ Error actualizando carrito:', error);
         return throwError(() => new Error('No se pudo actualizar el carrito'));
       })
     );
@@ -133,9 +143,10 @@ export class CartService {
     return this.http.delete<void>(`${this.baseUrl}/cart/${cartId}`).pipe(
       tap(() => {
         this.cartSubject.next(null);
+        console.log('✅ Carrito limpiado completamente');
       }),
       catchError((error) => {
-        console.error('Error limpiando carrito:', error);
+        console.error('❌ Error limpiando carrito:', error);
         return throwError(() => new Error('No se pudo limpiar el carrito'));
       })
     );
