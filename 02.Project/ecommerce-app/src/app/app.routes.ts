@@ -27,7 +27,7 @@ export const routes: Routes = [
     title: 'login'
   },
   {
-    path: 'user/cart', loadComponent: () => import('../app/pages/cart/cart.component').then(c=>c.CartComponent),
-    title: 'Carrito'
-  }
+    path: 'user', loadComponent: () => import('../app/pages/user/user.component').then(c=>c.UserComponent),
+  },
+
 ];
