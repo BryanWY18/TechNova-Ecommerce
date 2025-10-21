@@ -1,9 +1,11 @@
+
 <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+  <img src="images-2/hexagon-back-bue.jpg" alt="" class="z-0 blur-sm fixed inset-0 w-full h-full object-cover">
+  <div class="relative z-10 max-w-md w-full space-y-8">
     <form
       (ngSubmit)="handleSubmit()"
       [formGroup]="loginForm"
-      class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6"
+      class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 space-y-6"
     >
       <div class="text-center">
         <h2 class="text-3xl font-bold text-gray-900">Inicio de sesion</h2>
@@ -47,7 +49,7 @@
 
       <div class="text-center pt-4">
         <p class="text-sm text-gray-500">
-          ¿aun no tienes cuenta? 
+          ¿Aún no tienes cuenta? 
           <a class="font-medium text-blue-600 hover:text-blue-700 transition-colors"
             routerLink="/register" 
           

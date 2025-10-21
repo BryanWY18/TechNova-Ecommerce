@@ -94,4 +94,24 @@ export class CartService {
     )
   }
 
+   deleteCart(cartId:string):Observable<Cart | null>{
+    const userId = this.getUserId();
+    if (!userId) {
+      console.log('User no autentificado');
+      return of(null);
+    }
+    return this.httpClient.delete(`${this.baseUrl}/${cartId}`).pipe(
+      switchMap(() => this.getCartByUser(userId)),
+      tap((updatedCart) => {
+      this.toastService.success('Carrito eliminado correctamente');
+      this.cartSubject.next(updatedCart);
+    }),
+    catchError((error) => {
+      console.error('Error al eliminar carrito:', error);
+      return of(null);
+    })
+  );
+
+  }
+
 }

@@ -26,6 +26,20 @@
       ></div>
       }
     </div>
+
+    @if (showIndicators) {
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-10">
+            @for(image of images; track $index){
+                <button
+                    (click)="currentIndex = $index"
+                    [class.bg-blue-600]="$index === currentIndex"
+                    [class.bg-white]="!($index === currentIndex)"
+                    class="h-2 w-2 rounded-full shadow-md transition-colors duration-300"
+                ></button>
+            }
+        </div>
+    }
+
     } @if (showControls) {
     <button
       (click)="prevImage()"

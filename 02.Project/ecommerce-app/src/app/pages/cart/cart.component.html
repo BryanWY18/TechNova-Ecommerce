@@ -17,7 +17,6 @@
               <div class="flex flex-col sm:flex-row">
                 <div class="relative w-full sm:w-48 h-48 bg-gray-100 flex-shrink-0">
                   @if (item.product.imagesUrl) {
-                    {{item.product.imagesUrl}}
                     <img
                       [src]="item.product.imagesUrl[0]"
                       [alt]="item.product.name"
@@ -30,7 +29,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                      >
+                      > 
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
@@ -95,7 +94,7 @@
 
                     <div class="flex flex-col sm:flex-row gap-3 mt-auto">
                       <button
-                        [routerLink]="['/product', item.product._id]"
+                        [routerLink]="['/product-view', item.product._id]"
                         class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
                       >
                         Ver detalles
@@ -118,7 +117,7 @@
               <h2 class="text-xl font-semibold text-gray-900">
                 Resumen del pedido
               </h2>
-              <button 
+              <button
                 class="text-red-600 hover:text-red-700 text-sm font-medium"
               >
                 Vaciar carrito
@@ -127,7 +126,7 @@
 
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span>Productos ({{ 10 }})</span>
+                <span>Productos ({{ totalProducts$ | async}})</span>
                 <span>{{ 499.100 | currency }}</span>
               </div>
               <div class="flex justify-between">

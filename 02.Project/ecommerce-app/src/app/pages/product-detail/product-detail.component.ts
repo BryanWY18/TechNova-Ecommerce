@@ -3,6 +3,7 @@ import { Product } from '../../core/types/Products';
 import { ProductsService } from '../../core/services/products/products.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
+import { CartService } from '../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,7 +15,7 @@ import { CurrencyPipe } from '@angular/common';
 export class ProductDetailComponent implements OnInit{
   product: Product | null = null;
 
-  constructor(private productService: ProductsService, private route: ActivatedRoute){}
+  constructor(private productService: ProductsService, private route: ActivatedRoute, private cartService: CartService){}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe({
@@ -37,7 +38,20 @@ export class ProductDetailComponent implements OnInit{
     })
     // this.productService.getProductByID();
   }
+    loading:boolean = false;
   
+  
+    addToCart(){
+      if(!this.product || !this.product._id){
+        return
+      }
+      this.loading = true
+      console.log(this.loading);
+      this.cartService.addToCart(this.product._id).subscribe({
+        next:()=> this.loading = false,
+        error:()=> this.loading = false,
+      });
+    }
 
 
 }

@@ -4,10 +4,12 @@ import { catchError, map, Observable, throwError,  } from 'rxjs';
 import { Product, ProductResponse } from '../../types/Products';
 
 export type filters = {
-  q: string;
+  q?: string;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
-  order?: asc | desc | null;
+  sort?: string;
+  order?: 'asc' | 'desc';
+  limit?: number;
 };
 
 @Injectable({
@@ -29,8 +31,9 @@ export class ProductsService {
   }
 
   searchProducts(searchConfig:filters):Observable<Product[]>{
-    let filters:filters ={
-      q:searchConfig.q
+    let filters:any ={}
+    if (searchConfig.q) {
+        filters.q = searchConfig.q;
     }
     if (searchConfig.minPrice) {
       filters.minPrice = searchConfig.minPrice;
@@ -38,10 +41,19 @@ export class ProductsService {
     if (searchConfig.maxPrice) {
       filters.maxPrice = searchConfig.maxPrice;
     }
+    if (searchConfig.sort) {
+      filters.sort = searchConfig.sort;
+    }
+    if (searchConfig.order) {
+      filters.order = searchConfig.order;
+    }
+    if (searchConfig.limit) {
+      filters.limit = searchConfig.limit;
+    }
     const params = new HttpParams({fromObject: filters});
     return this.httpClient.get<ProductResponse>(`${this.baseUrl}/search`, {params}).pipe(
       map(response=>{
-        return response.products;
+        return response.products || [];;
       })
     )
 

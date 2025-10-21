@@ -1,4 +1,6 @@
+<img src="images-2/fondo-hexa.jpg" alt="" class="z-0 [clip-path:inset(0_0_15%_0)] blur-xs fixed inset-0 w-full h-400 object-cover">
 @if ( product ){
+
 <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-4 sm:py-8">
   <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
     <div class="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 overflow-hidden">
@@ -95,7 +97,7 @@
                   : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]'
               "
               class="w-full py-3 sm:py-4 px-6 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 text-sm sm:text-base">
-              <span class="flex items-center justify-center gap-2">
+              <span class="flex items-center justify-center gap-2 cursor-pointer" (click)="addToCart()">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13v6a1 1 0 001 1h9a1 1 0 001-1v-6m-9 0V9a1 1 0 011-1h7a1 1 0 011 1v4"></path>
                 </svg>
@@ -112,7 +114,7 @@
                   class="flex-1 py-3 px-6 bg-white hover:bg-gray-50 text-gray-700 rounded-lg sm:rounded-xl font-semibold border-2 border-gray-200 hover:border-gray-300 transition-all duration-300 text-sm sm:text-base">
                   <span class="flex items-center justify-center gap-2">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z "></path>
                     </svg>
                     <span class="hidden sm:inline">Añadir a</span> Lista de deseos
                   </span>

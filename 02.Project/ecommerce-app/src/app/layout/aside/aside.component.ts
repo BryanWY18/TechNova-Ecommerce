@@ -18,7 +18,7 @@ export class AsideComponent implements OnInit{
   sideBarOpen: boolean = false;
 
   routes: routeItem[] = [
-    { title: 'Inicio', route: '', textColor:'text-green-200'},
+    { title: 'Inicio', route: '', textColor:'text-blue-200'},
     { title: 'Productos', route: '/products' },
     { title: 'Categorias', route:'/categories'}
   ];
@@ -31,13 +31,13 @@ export class AsideComponent implements OnInit{
   ]
 
   authRoutes:routeItem[]=[
-    { title: 'mi perfil', route: '/user' },
-    { title: 'mi carrito', route:'/user/cart'}
+    { title: 'Mi perfil', route: '/user' },
+    { title: 'Mi carrito', route:'/user/cart'}
   ]
 
   notAuthRoutes: routeItem[]=[
-    { title: 'iniciar sesion', route: '/login' },
-    { title: 'registro', route:'/register'}
+    { title: 'Iniciar sesión', route: '/login' },
+    { title: 'Registrarme', route:'/register'}
   ]
   user: decodedToken | null = null;
 

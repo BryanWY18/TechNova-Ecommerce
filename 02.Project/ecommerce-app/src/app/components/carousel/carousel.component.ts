@@ -6,7 +6,6 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ProductsService } from '../../core/services/products/products.service';
 
 export type carouselImages =  {
     src: string;
@@ -23,42 +22,50 @@ export type carouselImages =  {
   styleUrl: './carousel.component.css',
 })
 export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() images: carouselImages = [
-    { src: 'images/bread.jpg', loaded: false, loading: false, alt: '' },
-    { src: 'images/esp32.jpg', loaded: false, loading: false, alt: '' },
-    { src: 'images/fruta.jpg', loaded: false, loading: false, alt: '' },
-    { src: 'images/silksong.jpg', loaded: false, loading: false, alt: '' },
-  ];
+  @Input() images: carouselImages = [];
 
+  /*  
+  { src: 'images/bread.jpg', loaded: false, loading: false, alt: '' },
+  { src: 'images/esp32.jpg', loaded: false, loading: false, alt: '' },
+  { src: 'images/fruta.jpg', loaded: false, loading: false, alt: '' },
+  { src: 'images/silksong.jpg', loaded: false, loading: false, alt: '' },
+   */
   
   @Input() autoPlay: boolean = true;
   @Input() showIndicators: boolean = true;
   @Input() showControls: boolean = true;
   @Input() interval: number = 7000;
   
-  constructor(public productsService:ProductsService){}
-
-  imagesByOrder:carouselImages = {
-  };
-  
   currentIndex = 0;
   private isDestroyed: boolean = false;
   private autoPlayInterval?: number;
 
   ngOnInit(): void {
-    this.loadImage(0);
-    if (this.autoPlay) {
-      this.startAutoPlay();
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('cambios en la configuracion del carousel', changes);
     
-    if (changes['images'] && !changes['images'].firstChange) {
-      this.currentIndex = 0;
-      this.resetLoadedStates();
-      this.loadImage(this.currentIndex);
+    if (changes['images']) {
+      const currentImages = changes['images'].currentValue as carouselImages;
+      if (currentImages && currentImages.length > 0) {
+          // Inicializar solo si es la primera vez que recibimos datos reales.
+          if (changes['images'].firstChange) {
+            this.currentIndex = 0;
+            this.resetLoadedStates();
+            this.loadImage(this.currentIndex);
+            
+            // Iniciar el autoplay (debe estar dentro de esta condición)
+            if (this.autoPlay) {
+                this.startAutoPlay();
+            }
+          } else if (!changes['images'].firstChange) {
+            // Lógica de cambio de array (si el padre carga un set de imágenes nuevo)
+            this.currentIndex = 0;
+            this.resetLoadedStates();
+            this.loadImage(this.currentIndex);
+          }
+      }
     }
     
     if (changes['autoPlay'] && !changes['autoPlay'].firstChange) {
