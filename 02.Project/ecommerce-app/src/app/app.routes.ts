@@ -27,16 +27,7 @@ export const routes: Routes = [
     title: 'login'
   },
   {
-    path: 'login', loadComponent:()=> import('../app/pages/login/login.component').then(c=>c.LoginComponent),
-    title: 'login'
-  }
-  ,
-  {
-    path: 'user/cart', loadComponent: () => import('../app/pages/cart/cart.component').then(c=>c.CartComponent),
-    title: 'Carrito'
+    path: 'user', loadComponent: () => import('../app/pages/user/user.component').then(c=>c.UserComponent),
   },
-  {
-    path: 'products/:id', loadComponent: () => import('../app/pages/product-detail/product-detail.component').then(c => c.ProductDetailComponent),
-    title: 'Detalle del producto'
-  }
+
 ];

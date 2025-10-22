@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { map, Observable, throwError } from 'rxjs';
 import { tokenSchema } from '../../types/Token';
+import { Router } from '@angular/router';
 
 export type decodedToken = {
   userId: string;
@@ -15,7 +16,7 @@ export type decodedToken = {
 export class AuthService {
   baseUrl = 'http://localhost:3000/api';
   
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private router: Router) {}
   get token(): string | null {
     return localStorage.getItem('token');
   }
@@ -70,6 +71,8 @@ get decodedToken(): decodedToken | null {
       next:(res)=>{
         localStorage.setItem('token', res.token);
         localStorage.setItem('refreshToken', res.refreshToken.toString());
+        
+        this.router.navigateByUrl('/')
       },
       error:(error)=>{
         console.log(error);
