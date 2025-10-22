@@ -32,7 +32,10 @@ export class AsideComponent implements OnInit{
 
   authRoutes:routeItem[]=[
     { title: 'mi perfil', route: '/user' },
-    { title: 'mi carrito', route:'/user/cart'}
+    { title: 'mi carrito', route:'/user/cart'},
+    { title: 'direcciones de envio', route:'/user/shipping_address'},
+    { title: 'metodos de pago', route:'/user/paymethods'},
+    { title: 'lista de deseos', route:'/user/wishlist'}
   ]
 
   notAuthRoutes: routeItem[]=[

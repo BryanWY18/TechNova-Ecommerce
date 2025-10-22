@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/user/profile/profile.component';
+import { USER_ROUTES } from './pages/user/user.routes';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'Home' },
@@ -28,6 +31,8 @@ export const routes: Routes = [
   },
   {
     path: 'user', loadComponent: () => import('../app/pages/user/user.component').then(c=>c.UserComponent),
+    //children: USER_ROUTES
+    loadChildren: () => import('../app/pages/user/user.routes').then(r=>r.USER_ROUTES),
   },
 
 ];
