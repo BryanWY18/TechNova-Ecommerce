@@ -8,7 +8,12 @@ import { FormFieldComponent } from "../../shared/form-field/form-field.component
 
 @Component({
   selector: 'app-login-form',
+<<<<<<< HEAD
   imports: [ReactiveFormsModule, RouterLink, FormFieldComponent],
+=======
+  standalone: true,
+  imports: [FormFieldComponent, ReactiveFormsModule, RouterLink],
+>>>>>>> bd5d69308416c649a2ff2995997a8d678ec655b2
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })
