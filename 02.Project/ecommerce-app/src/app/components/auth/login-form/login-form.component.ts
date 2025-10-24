@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { FormErrorService } from '../../../core/services/validation/form-error.service';
 import { RouterLink } from '@angular/router';
+import { canComponentDeactivate } from '../../../core/guards/form/form.guard';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -13,8 +15,8 @@ import { RouterLink } from '@angular/router';
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })
-export class LoginFormComponent {
-  fb = inject(FormBuilder);
+export class LoginFormComponent implements canComponentDeactivate{
+  private fb = inject(FormBuilder);
   loginForm: FormGroup;
 
   constructor(private validation: FormErrorService, private authService:AuthService){
@@ -23,6 +25,13 @@ export class LoginFormComponent {
       password:['', Validators.required]
     })
   }
+  canDeactivate() : Observable<boolean> | Promise<boolean> | boolean{
+    if (this.loginForm.pristine /*&& this.loginForm.touched*/) {
+      return true;
+    }
+    return confirm('Tienes cambios sin guardar. \n ¿Estás seguro de que quieres salir?');
+  };
+
   getErrorMessage(fieldName:string){
     const loginLabels = {
       email: 'email',

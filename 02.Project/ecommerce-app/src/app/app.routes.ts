@@ -26,11 +26,12 @@ export const routes: Routes = [
   {
     path: 'register', loadComponent:()=> import('../app/pages/register/register.component').then(c=>c.RegisterComponent),
     title: 'registro',
-    canDeactivate: [formGuard,/*A, B, C */ ]
+    // canDeactivate: [formGuard,/*A, B, C */ ]
   },
   {
     path: 'login', loadComponent: ()=> import('../app/pages/login/login.component').then(c=>c.LoginComponent),
-    title: 'login'
+    title: 'login',
+    canDeactivate: [formGuard]
   },
   {
     path: 'user', loadComponent: () => import('../app/pages/user/user.component').then(c=>c.UserComponent),
