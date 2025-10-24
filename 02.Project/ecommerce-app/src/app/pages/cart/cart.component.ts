@@ -9,8 +9,7 @@ import { RouterLink, Router, RouterModule } from '@angular/router';
   selector: 'app-cart',
   imports: [CommonModule, RouterLink, RouterModule],
   standalone: true,
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  templateUrl: './cart.component.html'
 })
 export class CartComponent implements OnInit{
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, throwError } from 'rxjs';
 import { tokenSchema } from '../../types/Token';
 import { Router } from '@angular/router';
 
@@ -15,8 +15,20 @@ export type decodedToken = {
 })
 export class AuthService {
   baseUrl = 'http://localhost:3000/api';
+
+  private authSubject: BehaviorSubject<boolean>=new BehaviorSubject<boolean>(false);
+  auth$:Observable<boolean>;
   
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(private httpClient: HttpClient, private router: Router) {    
+    this.authSubject.next(!!this.token);
+    this.auth$= this.authSubject.asObservable();
+  }
+ 
+
+  isAuth(){
+    return this.authSubject.value;
+  }
+
   get token(): string | null {
     return localStorage.getItem('token');
   }
@@ -71,6 +83,7 @@ get decodedToken(): decodedToken | null {
       next:(res)=>{
         localStorage.setItem('token', res.token);
         localStorage.setItem('refreshToken', res.refreshToken.toString());
+        this.authSubject.next(true);
         
         this.router.navigateByUrl('/')
       },
@@ -78,6 +91,12 @@ get decodedToken(): decodedToken | null {
         console.log(error);
       }
     })
+  }
+
+  logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    this.authSubject.next(false);
   }
 
   refreshToken(refreshToken:string){
