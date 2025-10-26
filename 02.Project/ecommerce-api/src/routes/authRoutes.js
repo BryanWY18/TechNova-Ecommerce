@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { register, login } from '../controllers/authController.js';
+import { register, login, checkEmailAlredyRegistered, refreshToken } from '../controllers/authController.js';
 import validate from '../middlewares/validation.js';
 
 const router = express.Router();
@@ -26,9 +26,9 @@ router.post('/register',
     body('role')
       .optional()
       .isIn(['admin', 'customer', 'guest']).withMessage('Role must to be admin,customer or guest'),
-    body('avatar')
-      .optional()
-      .isURL().withMessage('Avatar must be a valid URL')
+    // body('avatar')
+    //   .optional()
+    //   .isURL().withMessage('Avatar must be a valid URL')
   ]
   , validate, register);
 
@@ -40,5 +40,9 @@ router.post('/login', [
   body('password')
     .notEmpty().withMessage('Password is required')
 ], validate, login);
+
+router.get('/check-email', checkEmailAlredyRegistered);
+
+router.post('/refresh-token', refreshToken);
 
 export default router;

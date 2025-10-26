@@ -27,11 +27,11 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  imagesUrl: [{
+  imageUrl: {
     type: String,
     default: 'https://placehold.co/800x600.png',
     trim: true,
-  }],
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',

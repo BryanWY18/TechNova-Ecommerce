@@ -13,7 +13,7 @@ import {
   deleteUser,
   searchUsers,
 } from "../controllers/userController.js";
-import authMiddleware from "../middlewares/auth.js"; // Middleware de autenticación
+import authMiddleware from "../middlewares/authMiddleware.js"; // Middleware de autenticación
 import isAdmin from "../middlewares/isAdminMiddleware.js"; // Middleware de admin
 
 const router = express.Router();

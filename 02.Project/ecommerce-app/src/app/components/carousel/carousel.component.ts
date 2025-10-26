@@ -7,19 +7,22 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
+export type carouselImages =  {
+    src: string;
+    loaded: boolean;
+    loading: boolean;
+    alt: string;
+    
+  }[] 
 @Component({
   selector: 'app-carousel',
+  standalone: true,
   imports: [],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css',
 })
 export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() images: {
-    src: string;
-    loaded: boolean;
-    loading: boolean;
-    alt: string;
-  }[] = [
+  @Input() images: carouselImages = [
     { src: 'images/bread.jpg', loaded: false, loading: false, alt: '' },
     { src: 'images/esp32.jpg', loaded: false, loading: false, alt: '' },
     { src: 'images/fruta.jpg', loaded: false, loading: false, alt: '' },
@@ -29,7 +32,7 @@ export class CarouselComponent implements OnInit, OnChanges, OnDestroy {
   @Input() autoPlay: boolean = true;
   @Input() showIndicators: boolean = true;
   @Input() showControls: boolean = true;
-  @Input() interval: number = 5000;
+  @Input() interval: number = 7000;
 
   currentIndex = 0;
   private isDestroyed: boolean = false;

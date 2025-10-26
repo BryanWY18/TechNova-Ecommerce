@@ -7,6 +7,7 @@ import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-products-list',
+  standalone: true,
   imports: [ProductsCardComponent, PlaceholderComponent, MatPaginatorModule],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css'
@@ -19,7 +20,7 @@ export class ProductsListComponent implements OnInit{
     this.getProducts();
   }
 
-  getProducts(page:number=1, limit:number=10){
+  getProducts(page:number=1, limit:number=16){
     this.productsService.getProducts(page, limit).subscribe({
       next:(data)=>{
         console.log(data);
@@ -34,4 +35,14 @@ export class ProductsListComponent implements OnInit{
     console.log(event);
     this.getProducts(event.pageIndex, event.pageSize);
   }
+
+  get skeletonArray(): number[] {
+    const expectedCount = this.productResponse?.products?.length || 8;
+    return Array(expectedCount).fill(0);
+  }
+  
+  retryLoadProducts(): void {
+    this.getProducts();
+  }
+ 
 }
