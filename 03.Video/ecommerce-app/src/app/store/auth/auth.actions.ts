@@ -1,0 +1,10 @@
+import { createAction, props } from "@ngrx/store";
+import { User } from "../../core/profile.service";
+
+export const loadUser = createAction('[Auth] Load User');
+
+export const loadUserSuccess = createAction('[Auth] Load User Success', props<{ user: User }>());
+
+export const loadUserFailure = createAction('[Auth] Load User Failure', props<{ error: any }>());
+
+export const logout = createAction('[Auth] Logout');

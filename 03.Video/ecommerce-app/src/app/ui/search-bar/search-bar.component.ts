@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
-  selector: 'ui-search-bar',
-  standalone: true,
-  imports: [CommonModule, FormsModule, IconComponent],
-  templateUrl: './search-bar.component.html',
-  styleUrl: './search-bar.component.css'
+    selector: 'ui-search-bar',
+    imports: [CommonModule, FormsModule, IconComponent],
+    templateUrl: './search-bar.component.html',
+    styleUrl: './search-bar.component.css'
 })
 export class SearchBarComponent {
   @Input() placeholder = 'Buscar productos...';

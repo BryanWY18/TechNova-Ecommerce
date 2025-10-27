@@ -1,9 +1,16 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 //import { ProductService } from '../../core/product.service';
 import { ThemeService } from '../../core/theme.service';
+import { UserStateService } from '../../core/user-state.service';
+import { User } from '../../core/profile.service';
+// NgRx Imports
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../store/auth/auth.actions';
+import { selectUser } from '../../store/auth/auth.selectors';
 
 // UI Components
 import { SearchBarComponent } from '../../ui/search-bar/search-bar.component';
@@ -19,14 +26,8 @@ interface Category {
   description: string;
 }
 
-interface User {
-  displayName: string;
-  email: string;
-}
-
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -44,23 +45,37 @@ interface User {
 export class LayoutComponent implements OnInit, OnDestroy {
   searchQuery = '';
   categories: Category[] = [{ _id: '12', name: 'Todo', description: 'Todo' }];
-  user: User | null = null;
+  //user: User | null = null;
   showUserMenu = false;
   showCategoriesMenu = false;
   showMobileMenu = false;
+
+  private userSubscription: Subscription = new Subscription();
+
+  user$: Observable<User | null>;
 
   constructor(
     private authService: AuthService,
     //private productService: ProductService,
     private router: Router,
-    private themeService: ThemeService
-  ) { }
+    private themeService: ThemeService,
+    private userStateService: UserStateService,
+    private store: Store
+  ) {
+    this.user$ = this.store.select(selectUser);
+  }
 
   ngOnInit() {
     // Initialize theme
     this.themeService.init();
     //this.loadCategories();
-    //this.loadUser();
+
+    //Suscribirse al estado reactivo del usuario
+    //this.subscribeToUserState();
+    //Cargar el usuario inicial
+    //this.userStateService.loadUser();
+
+    this.store.dispatch(AuthActions.loadUser());
 
     // Check initial screen size
     this.checkScreenSize();
@@ -68,6 +83,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Cleanup if needed
+    // this.userSubscription.unsubscribe();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -101,11 +117,21 @@ export class LayoutComponent implements OnInit, OnDestroy {
     //  });
   }
 
-  loadUser() {
-    // Aquí deberías implementar la lógica para obtener el usuario actual
-    // Por ahora simularemos que no hay usuario logueado
-    this.user = null;
-  }
+
+  /**
+   * Suscribirse al estado reactivo del usuario
+   */
+  // private subscribeToUserState() {
+  //   this.userSubscription = this.userStateService.user$.subscribe({
+  //     next: (user) => {
+  //       this.user = user;
+  //       console.log('Estado del usuario actualizado en el Layout', user);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error en la suscripción del usuario', error);
+  //     }
+  //   })
+  // }
 
   onSearch(query: string) {
     if (query.trim()) {
@@ -132,7 +158,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   logout() {
     //this.authService.logout();
-    this.user = null;
+    //this.userStateService.clearUser();
+    this.store.dispatch(AuthActions.logout());
     this.showUserMenu = false;
     this.router.navigate(['/']);
   }
