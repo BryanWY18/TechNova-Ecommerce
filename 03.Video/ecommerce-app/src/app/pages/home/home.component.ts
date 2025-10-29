@@ -7,16 +7,15 @@ import { ButtonComponent } from '../../ui/button/button.component';
 import { CardComponent } from '../../ui/card/card.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ProductGridComponent,
-    ButtonComponent,
-    CardComponent
-  ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+    selector: 'app-home',
+    imports: [
+        CommonModule,
+        ProductGridComponent,
+        ButtonComponent,
+        CardComponent
+    ],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css'
 })
 export class HomeComponent {
   private productService = inject(ProductService);

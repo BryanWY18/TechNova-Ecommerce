@@ -2,9 +2,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
+import { UserStateService } from '../../../core/user-state.service';
 import { FormFieldComponent } from '../../../ui/form-field/form-field.component';
 import { InputComponent } from '../../../ui/input/input.component';
 import { ButtonComponent } from '../../../ui/button/button.component';
+
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../store/auth/auth.actions';
 
 type LoginForm = FormGroup<{
   email: FormControl<string>;
@@ -13,7 +17,6 @@ type LoginForm = FormGroup<{
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -26,7 +29,9 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private userStateService: UserStateService,
+    private store: Store
   ) {
     this.form = this.fb.nonNullable.group({
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
@@ -42,6 +47,8 @@ export class LoginComponent {
     const { email, password } = this.form.getRawValue();
     this.auth.login(email, password).subscribe({
       next: () => {
+        //this.userStateService.loadUser();
+        this.store.dispatch(AuthActions.loadUser());
         this.loading = false;
         this.router.navigateByUrl('/');
       },
