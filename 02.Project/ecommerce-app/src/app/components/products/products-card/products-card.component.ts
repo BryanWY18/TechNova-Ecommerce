@@ -21,10 +21,8 @@ export class ProductsCardComponent {
 
   addToCart(){
     this.loading = true
-    console.log(this.loading);
-    this.cartService.addToCart(this.product._id).subscribe({
-      next:()=> this.loading = false,
-      error:()=> this.loading = false,
-    });
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   }
 }

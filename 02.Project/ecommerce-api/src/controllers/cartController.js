@@ -74,7 +74,7 @@ async function updateCart(req, res) {
 
     // Validar que cada producto tenga los campos requeridos
     for (const item of products) {
-      if (!item.product || !item.quantity || item.quantity < 1) {
+      if (!item.product || !item.quantity ) {
         return res.status(400).json({ error: 'Each product must have product ID and quantity >= 1' });
       }
     }
