@@ -1,5 +1,6 @@
 import Cart from '../models/cart.js';
 import errorHandler from '../middlewares/errorHandler.js';
+import Product from '../models/product.js'
 
 async function getCarts(req, res) {
   try {
@@ -113,7 +114,7 @@ async function addProductToCart(req, res) {
   try {
     const { userId, productId, quantity = 1 } = req.body;
 
-    if (!userId || !productId || quantity < 1) {
+    if (!userId || !productId) {
       return res.status(400).json({ error: 'User ID, product ID, and valid quantity are required' });
     }
 

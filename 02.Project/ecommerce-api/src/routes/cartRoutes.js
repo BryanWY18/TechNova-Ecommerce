@@ -7,6 +7,7 @@ import {
   updateCart,
   deleteCart,
   addProductToCart,
+  removeFromCart
 } from '../controllers/cartController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import isAdmin from '../middlewares/isAdminMiddleware.js';

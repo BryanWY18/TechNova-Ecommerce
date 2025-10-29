@@ -17,6 +17,7 @@ import { cartProductSchema } from './Products';
 import { userSchema } from './User';
 
 export const cartSchema = z.object({
+    _id: z.string(),
     user: userSchema,
     products: z.array(z.object({product: cartProductSchema , quantity: z.number().min(1)})),
     

@@ -97,6 +97,61 @@ export class CartService {
     )
   }
 
+  removeFromCart(productId: string): Observable<Cart| null>{
+    const userId= this.getUserId();
+    if (!userId) {
+      console.log('usuario no autentificado');
+      return of(null);
+    }
+    const payload = {
+      userId,
+      productId
+    }
+    return this.httpClient.delete(`${this.baseUrl}/remove-product`, {body: payload}).pipe(
+      switchMap(()=>this.getCartByUserId(userId)),
+      tap((updatedCart)=>{
+        this.cartSubject.next(updatedCart),
+        this.toast.success('Producto eliminado del carrito');
+      })
+    )
+  };
+
+  clearCart():Observable<Cart | null>{
+    const cartId = this.cartSubject.value?._id;
+    if (!cartId) {
+      return of(null);
+    }
+    return this.httpClient.delete(`${this.baseUrl}/${cartId}`).pipe(
+      tap(()=>{
+        this.cartSubject.next(null);
+        this.toast.success('Carrito eliminado');
+      }),
+      map(()=>null)
+    );
+  }
+  //[ lattop: 1, ram: 2, mouse:3, sliksong: 4]
+  getItemCount(): Observable<number>{
+    return this.cart$.pipe(
+      map((cart)=>{
+        if (!cart || cart.products.length ===0) {
+          return 0;
+        }
+        return cart.products.reduce((total, item)=> total + item.quantity, 0);
+      })
+    )
+  };
+
+  getCartTotal():Observable<number>{
+    return this.cart$.pipe(
+      map((cart)=>{
+        if (!cart || cart.products.length ===0) {
+          return 0;
+        }
+        return cart.products.reduce((total, item)=> total + item.product.price*item.quantity ,0);
+      })
+    )
+  }
+
   
 
 }
