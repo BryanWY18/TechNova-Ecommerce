@@ -29,6 +29,12 @@ router.post('/cart', authMiddleware, createCart);
 // Agregar producto al carrito (función especial)
 router.post('/cart/add-product', authMiddleware, addProductToCart);
 
+router.delete(
+  "/cart/remove-product",
+  authMiddleware,
+  removeFromCart
+);
+
 // Actualizar carrito completo
 router.put('/cart/:id', authMiddleware, updateCart);
 

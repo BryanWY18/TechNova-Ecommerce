@@ -150,6 +150,35 @@ async function addProductToCart(req, res) {
     next(error);
   }
 }
+async function removeFromCart (req, res, next){
+  const { userId, productId } = req.body;
+
+  try {
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const productIndex = cart.products.findIndex(
+      (p) => p.product.toString() === productId
+    );
+
+    if (productIndex > -1) {
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      cart.totalPrice -= product.price * cart.products[productIndex].quantity;
+      cart.products.splice(productIndex, 1);
+      await cart.save();
+    }
+
+    res.status(200).json(cart);
+  } catch (error) {
+    errorHandler(error, req, res, next);
+  }
+};
 
 export {
   getCarts,
@@ -159,4 +188,5 @@ export {
   updateCart,
   deleteCart,
   addProductToCart,
+  removeFromCart,
 };
