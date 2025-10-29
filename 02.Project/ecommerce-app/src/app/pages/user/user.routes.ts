@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { userResolver } from "../../core/resolvers/user/user.resolver";
 
 export const USER_ROUTES: Routes =[
     {
@@ -19,7 +20,10 @@ export const USER_ROUTES: Routes =[
     {
         path:'profile', 
         loadComponent: ()=>import('./profile/profile.component').then(c=>c.ProfileComponent),
-        title: 'Mi perfil'
+        title: 'Mi perfil',
+        resolve:{
+            user: userResolver
+        }
     },
     {
         path: 'wishlist',
