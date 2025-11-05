@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../core/product.service';
 
 @Component({
-  selector: 'ui-product-card-simple',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './product-card-simple.component.html',
-  styleUrl: './product-card-simple.component.css'
+    selector: 'ui-product-card-simple',
+    imports: [CommonModule],
+    templateUrl: './product-card-simple.component.html',
+    styleUrl: './product-card-simple.component.css'
 })
 export class ProductCardSimpleComponent {
   @Input() product!: Product;

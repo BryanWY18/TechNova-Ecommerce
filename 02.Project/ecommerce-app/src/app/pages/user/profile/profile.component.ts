@@ -11,15 +11,20 @@ import { User } from '../../../core/types/User';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-
-  user:User|null=null;
+  user: User | null =null;
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(data=>{
+      // const object = {
+      //   name: '',
+      //   age: 15
+      // }
+      // object['name'] 
+      // object.name
       console.log(data['user']);
-      this.user=data['user'].user;
-    })    
+      this.user = data['user'];
+    })
   }
 
 }

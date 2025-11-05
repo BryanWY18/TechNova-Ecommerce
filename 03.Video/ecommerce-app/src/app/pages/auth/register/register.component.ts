@@ -18,11 +18,10 @@ type RegisterForm = FormGroup<{
 }>;
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+    selector: 'app-register',
+    imports: [CommonModule, ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   loading = false;

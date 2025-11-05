@@ -10,7 +10,7 @@ export const USER_ROUTES: Routes =[
     {
         path: 'shipping_address',
         loadComponent: ()=> import('./shipping-address/shipping-address.component').then(c=>c.ShippingAddressComponent),
-        title:'Direcciones de envio'
+        title:'Direcciones de envio',
     },
     {
         path:'cart',

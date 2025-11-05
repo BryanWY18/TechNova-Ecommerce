@@ -1,3 +1,4 @@
+import z from 'zod';
 import { Category } from './Category';
 
 export type Product = {
@@ -20,3 +21,13 @@ export type ProductResponse = {
     totalResults: number;
   };
 };
+
+export const cartProductSchema = z.object({
+    _id: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
+    price: z.number(),
+    imageUrl: z.string().optional(),
+    stock: z.number(),
+    category: z.string(),
+});

@@ -7,6 +7,7 @@ import {
   updateCart,
   deleteCart,
   addProductToCart,
+  removeFromCart
 } from '../controllers/cartController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import isAdmin from '../middlewares/isAdminMiddleware.js';
@@ -28,6 +29,12 @@ router.post('/cart', authMiddleware, createCart);
 
 // Agregar producto al carrito (función especial)
 router.post('/cart/add-product', authMiddleware, addProductToCart);
+
+router.delete(
+  "/cart/remove-product",
+  authMiddleware,
+  removeFromCart
+);
 
 // Actualizar carrito completo
 router.put('/cart/:id', authMiddleware, updateCart);

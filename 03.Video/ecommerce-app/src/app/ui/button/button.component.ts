@@ -5,10 +5,9 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
 @Component({
-  selector: 'ui-button',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'ui-button',
+    imports: [CommonModule],
+    template: `
     <button [disabled]="disabled || loading" class="btn"
             [class.primary]="variant==='primary'"
             [class.secondary]="variant==='secondary'"
@@ -24,7 +23,7 @@ type Size = 'sm' | 'md' | 'lg';
       }
     </button>
   `,
-  styles: [`
+    styles: [`
     .btn {
       border-radius: var(--r2);
       padding: 10px 14px;
