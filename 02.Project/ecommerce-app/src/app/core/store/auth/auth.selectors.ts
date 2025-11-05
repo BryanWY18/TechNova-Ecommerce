@@ -1,8 +1,10 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthState } from './auth.state';
 
+// Feature selector
 export const selectAuthState = createFeatureSelector<AuthState>('auth');
 
+// Basic selectors
 export const selectToken = createSelector(
   selectAuthState,
   (state) => state.token
@@ -22,6 +24,7 @@ export const selectIsAuthenticated = createSelector(
   selectAuthState,
   (state) => state.isAuthenticated
 );
+
 export const selectIsLoading = createSelector(
   selectAuthState,
   (state) => state.isLoading
@@ -32,10 +35,15 @@ export const selectAuthError = createSelector(
   (state) => state.error
 );
 
-//selector derivado
+// Derived selectors
 export const selectUserId = createSelector(
   selectDecodedToken,
   (decodedToken) => decodedToken?.userId ?? null
+);
+
+export const selectUserDisplayName = createSelector(
+  selectDecodedToken,
+  (decodedToken) => decodedToken?.displayName ?? null
 );
 
 export const selectUserRole = createSelector(
@@ -44,6 +52,22 @@ export const selectUserRole = createSelector(
 );
 
 export const selectIsAdmin = createSelector(
-    selectUserRole,
-    (role)=> role === 'admin'
-)
+  selectUserRole,
+  (role) => role === 'admin'
+);
+
+export const selectIsCustomer = createSelector(
+  selectUserRole,
+  (role) => role === 'customer'
+);
+
+export const selectAuthInfo = createSelector(
+  selectIsAuthenticated,
+  selectDecodedToken,
+  selectIsLoading,
+  (isAuthenticated, decodedToken, isLoading) => ({
+    isAuthenticated,
+    user: decodedToken,
+    isLoading,
+  })
+);
