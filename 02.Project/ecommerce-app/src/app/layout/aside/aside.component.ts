@@ -4,14 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { SideMenuComponent } from '../../components/sidebar/side-menu/side-menu.component';
 import { routeItem } from '../../components/sidebar/menu-item/menu-item.component';
 import { AdminDirective } from '../../core/directives/admin.directive';
-import {
-  AuthService,
-  decodedToken,
-} from '../../core/services/auth/auth.service';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectDecodedToken } from '../../core/store/auth/auth.selectors';
 import { Logout } from '../../core/store/auth/auth.actions';
+import { decodedToken } from '../../core/types/Token';
 
 @Component({
   selector: 'app-aside',

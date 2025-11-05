@@ -1,12 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
 import { take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectIsAuthenticated } from '../../store/auth/auth.selectors';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
   /// 1,54,7562,42,454656,565
   // authService.auth$.pipe(
   //   take(1),
