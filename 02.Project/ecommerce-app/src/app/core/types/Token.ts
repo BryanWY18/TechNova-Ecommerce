@@ -5,11 +5,11 @@ export const tokenSchema = z.object({
    refreshToken: z.string()
 }); 
 
+export type token = z.infer<typeof tokenSchema>; 
+
+
 export type decodedToken = {
   userId: string;
   displayName: string;
   role: 'admin' | 'customer' | 'guest';
 };
-
-
-export type token = z.infer<typeof tokenSchema>; 

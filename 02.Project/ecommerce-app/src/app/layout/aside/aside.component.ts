@@ -5,6 +5,10 @@ import { SideMenuComponent } from "../../components/sidebar/side-menu/side-menu.
 import { routeItem } from '../../components/sidebar/menu-item/menu-item.component';
 import { AdminDirective } from '../../core/directives/admin.directive';
 import { AuthService, decodedToken } from '../../core/services/auth/auth.service';
+import { Observable, of } from 'rxjs';
+import { selectDecodedToken } from '../../core/store/auth/auth.selectors';
+import { Store } from '@ngrx/store';
+import { Logout } from '../../core/store/auth/auth.actions';
 
 
 @Component({
@@ -42,14 +46,17 @@ export class AsideComponent implements OnInit{
     { title: 'Iniciar sesión', route: '/login' },
     { title: 'Registrarme', route:'/register'}
   ]
-  user: decodedToken | null = null;
 
-  constructor(private authService: AuthService){
-    
-  }
+  user$:Observable< decodedToken | null> = of (null);
+
+  constructor(private readonly store:Store){}
 
   ngOnInit(): void {
-    this.user = this.authService.decodedToken;
-    console.log(this.user)
+    this.user$ = this.store.select(selectDecodedToken)
   }
+
+  logOut(){
+    this.store.dispatch(Logout())
+  }
+  
 }

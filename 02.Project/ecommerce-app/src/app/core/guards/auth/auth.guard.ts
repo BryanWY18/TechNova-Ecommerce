@@ -2,6 +2,8 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectIsAunthenticated } from '../../store/auth/auth.selectors';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -20,7 +22,15 @@ export const authGuard: CanActivateFn = (route, state) => {
   //   return false;
   // } });
   const router = inject(Router)
-  if (authService.isAuth()) {
+  const store = inject(Store);
+
+  let isAuth:boolean = false;
+
+  store.select(selectIsAunthenticated).pipe(
+    take(1)
+  ).subscribe({next:(isAunthenticated)=>{isAuth=isAunthenticated}});
+
+  if (isAuth) {
     return true
   }
   router.navigateByUrl('/login');

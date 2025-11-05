@@ -6,6 +6,8 @@ import { RouterLink } from '@angular/router';
 import { canComponentDeactivate } from '../../../core/guards/form/form.guard';
 import { Observable } from 'rxjs';
 import { FormFieldComponent } from '../../shared/form-field/form-field.component';
+import { Store } from '@ngrx/store';
+import { login } from '../../../core/store/auth/auth.actions';
 
 
 @Component({
@@ -19,7 +21,7 @@ export class LoginFormComponent implements canComponentDeactivate{
   private fb = inject(FormBuilder);
   loginForm: FormGroup;
 
-  constructor(private validation: FormErrorService, private authService:AuthService){
+  constructor(private validation: FormErrorService, private authService:AuthService, private readonly store:Store){
     this.loginForm = this.fb.group({
       email:['', [Validators.required, Validators.email]], 
       password:['', Validators.required]
@@ -41,7 +43,8 @@ export class LoginFormComponent implements canComponentDeactivate{
   }
 
   handleSubmit(){
-    console.log(this.loginForm.value);
-    this.authService.login(this.loginForm.value);
+    //console.log(this.loginForm.value);
+    //this.authService.login(this.loginForm.value);
+    this.store.dispatch(login({credentials:this.loginForm.value}))
   }
 }
