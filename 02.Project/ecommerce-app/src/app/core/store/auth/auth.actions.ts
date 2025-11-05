@@ -4,45 +4,45 @@ import { decodedToken } from '../../types/Token';
 
 export const login = createAction(
   '[Auth] login',
-  props<{ credentials: UserCredentials }>
+  props<{ credentials: UserCredentials }>()
 );
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ token: string; refreshToken: string; decodedToken: decodedToken }>
+  props<{ token: string; refreshToken: string; decodedToken: decodedToken }>()
 );
 
 export const loginFailure = createAction(
   '[Auth] Login Failure',
-  props<{ error: string }>
+  props<{ error: string }>()
 );
 
 export const Logout = createAction('[Auth] Logout');
 
 export const register = createAction(
   '[Auth] Register',
-  props<{ userData: UserForm }>
+  props<{ userData: UserForm }>()
 );
 
 export const registerSuccess = createAction('[Auth] Register Success');
 export const registerFailure = createAction(
   '[Auth] Register Failure',
-  props<{ error: string }>
+  props<{ error: string }>()
 );
 
 export const refreshToken = createAction(
   '[Auth] Refresh Token',
-  props<{ refreshToken: string }>
+  props<{ refreshToken: string }>()
 );
 
 export const refreshTokenSuccess = createAction(
   '[Auth] Refresh Token Success',
-  props<{ token: string; refreshToken: string; decodedToken: decodedToken }>
+  props<{ token: string; refreshToken: string; decodedToken: decodedToken }>()
 );
 
 export const refreshTokenFailure = createAction(
   '[Auth] Refresh Token Failure',
-  props<{ error: string }>
+  props<{ error: string }>()
 );
 
 export const initializeAuth = createAction('[Auth] Initialize');
