@@ -41,6 +41,7 @@ async function register(req, res, next) {
       role,
       phone
     });
+  
     await newUser.save();
     res.status(201).json({ displayName, email, phone });
   } catch (error) {
