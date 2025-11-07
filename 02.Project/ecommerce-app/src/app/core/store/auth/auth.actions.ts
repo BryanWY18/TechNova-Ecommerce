@@ -20,7 +20,7 @@ export const loginFailure = createAction(
 export const Logout = createAction('[Auth] Logout');
 
 export const register = createAction(
-  '[Auth] Register', 
+  '[Auth] Register',
   props<{ userData: UserForm }>()
 );
 

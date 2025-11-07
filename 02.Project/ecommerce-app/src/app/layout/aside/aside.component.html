@@ -55,22 +55,31 @@
       </button>
     </div>
     <div class="flex-1 p-4 overflow-y-auto">
-      @if (user$ | async; as user) {
-        <app-side-menu [title]="`Bienvenido ${user.displayName}`" [navRoutes]="authRoutes"></app-side-menu>
-        <button class="py-2 px-4 rounded-lg bg-white text-slate-700" (click)="logOut()">
-          Cerrar sesión
+      @if (user$ | async; as user ) {
+      <app-side-menu
+        [title]="`Willkommen ${user.displayName}`"
+        [navRoutes]="authRoutes"
+      ></app-side-menu>
+      
+        <button class="py-2 px-4 rounded-lg bg-white text-slate-700 w-3/5 mx-auto mt-5 hover:bg-slate-700 hover:text-white"
+          (click)="logout()"
+        >
+          cerrar sesion
         </button>
       }@else {
-        <app-side-menu [navRoutes]="notAuthRoutes"></app-side-menu>
+      <app-side-menu [navRoutes]="notAuthRoutes"></app-side-menu>
       }
-      
-      
-      <app-side-menu [navRoutes]="routes" title="menu principal"></app-side-menu>
-    
-      <app-side-menu 
-      *appAdmin
-      [navRoutes]="adminRoutes" title="Administracion"></app-side-menu>
-      
+
+      <app-side-menu
+        [navRoutes]="routes"
+        title="menu principal"
+      ></app-side-menu>
+
+      <app-side-menu
+        *appAdmin
+        [navRoutes]="adminRoutes"
+        title="Administracion"
+      ></app-side-menu>
     </div>
   </aside>
 </div>

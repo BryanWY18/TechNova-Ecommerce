@@ -1,5 +1,7 @@
 import { Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import { AuthService } from '../services/auth/auth.service';
+import { Store } from '@ngrx/store';
+import { selectIsAdmin } from '../store/auth/auth.selectors';
+import { take } from 'rxjs';
 
 @Directive({
   selector: '[appAdmin]',
@@ -8,7 +10,7 @@ import { AuthService } from '../services/auth/auth.service';
 export class AdminDirective implements OnInit{
 
   constructor(
-    private authService:AuthService,
+    private store: Store,
     private viewContainer: ViewContainerRef,
     private templateRef: TemplateRef<any>
   ) { 
@@ -18,9 +20,10 @@ export class AdminDirective implements OnInit{
     this.checkAdminAccess()
   }
   private checkAdminAccess():void{
-    const role = this.authService.decodedToken?.role ?? '';
+    let role:boolean = false;
+    this.store.select(selectIsAdmin).pipe(take(1)).subscribe({next:(isAdmin)=> role = isAdmin})
     this.viewContainer.clear();
-    if (role ==='admin') {
+    if (role) {
         this.viewContainer.createEmbeddedView(this.templateRef)
     }
   }

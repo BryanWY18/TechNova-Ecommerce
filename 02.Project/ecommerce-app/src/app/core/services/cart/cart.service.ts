@@ -6,12 +6,14 @@ import {
   Observable,
   of,
   switchMap,
+  take,
   tap,
 } from 'rxjs';
 import { Cart, cartSchema } from '../../types/Cart';
-import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../toast/toast.service';
+import { Store } from '@ngrx/store';
+import { selectUserId } from '../../store/auth/auth.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +25,13 @@ export class CartService {
 
   constructor(
     private httpClient: HttpClient,
-    private authService: AuthService,
     private toast: ToastService,
+    private store: Store
   ) {
     this.loadUserCart();
   }
 
-  getUserId(): string | null {
+  getUserId(): string {
     // const id = ''
     // if (id) {
     //   return id;
@@ -40,7 +42,9 @@ export class CartService {
 
     // return id ? id.toUpperCase() : 'IdGenerico';
     // return id ?? 'IdGenrico'
-    return this.authService.decodedToken?.userId ?? null;
+    let userId: string =''
+    this.store.select(selectUserId).pipe(take(1)).subscribe({next:(id)=>userId=id ?? ''})
+    return userId
   }
 
   getCartByUserId(userId: string): Observable<Cart | null> {
