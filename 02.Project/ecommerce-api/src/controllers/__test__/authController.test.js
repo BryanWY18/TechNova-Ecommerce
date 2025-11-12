@@ -4,6 +4,7 @@ import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest} 
 import User from '../../models/user.js';
 import {register} from '../authController.js';
 import { body } from 'express-validator';
+import { json } from 'express';
 
 describe('AuthController Prueba para el registro y login',()=>{
     beforeEach(()=>{
@@ -42,25 +43,56 @@ describe('AuthController Prueba para el registro y login',()=>{
             const req={
                 body:mockUser
             };
-            const rest={
+            const res={
                 status:jest.fn().mockReturnThis(),
                 json:jest.fn()
             }
             const next=jest.fn()
 
-            await register(req, rest, next);
+            await register(req, res, next);
 
             expect(User.findOne).toHaveBeenCalledWith({email:mockUser.email});
             expect(bcrypt.hash).toHaveBeenCalledWith(mockUser.password, 10);
             expect(mockSaveUser).toHaveBeenCalled();
-            expect(rest.status).toHaveBeenNthCalledWith(201);
-            expect(rest.json).toHaveBeenCalledWith({
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({
                 displayName: mockUser.displayName,
                 email:mockUser.email,
                 phone:mockUser.phone
             });
             expect(next).not.toHaveBeenCalled();
         })
+    })
+
+    it('deberia rechazar el registro si el email ya existe', async()=>{
+        const existingUser={
+            displayName:'Usuario existente',
+            email:'exist@exist.com',
+            password:'password123',
+            phone:'1234567890',
+        };
+
+        jest.spyOn(User,'findOne').mockRejectedValue({
+            _id:'userExisting123',
+            email:existingUser.email,
+            displayName:existingUser.displayName
+        });
+
+        const req={
+            body:existingUser,
+        };
+        const res={
+            status:jest.fn().mockReturnThis(),
+            json:jest.fn()
+        };
+        const next=jest.fn();
+
+        await register(req,res,next);
+
+        expect(User.findOne).toHaveBeenCalledWith({email:existingUser.email});
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({message:'User already exist'});
+        expect(next).not.toHaveBeenCalled();
     })
 
 //    describe('login, login de los usuarios')

@@ -1,9 +1,9 @@
 export default {
-    testEnvironment: 'node', //el entorno donde trabajamos
-    transform:{}, //import/export en cualquier lugar
-    moduleFileExtensions:['js','json'], //Los archivos que queremos probar
-    testMatch:['**/__test__/**/*.test.js','**/?(*.)+(spec|test).js'], //donde se encuentran 
-    testPathIgnorePatterns:['/node_modules/'], //carpetas donde no queremos hacer pruebas
-    collectCoverage:false, //genera resumen de las pruebas
-    coverageDirectory:'coverage', //donde queremos que se guarde el resumen
-}
+  testEnvironment: "node", // en entorno en donde trabajamos
+  transform: {}, //import/exporte en cuaalquier lugar
+  moduleFileExtensions: ["js", "json"], //los archivos que queremos probar
+  testMatch: ["**/__test__/**/*.test.js", "**/?(*.)+(spec|test).js"], //donde se encuentran nuestras pruebas
+  testPathIgnorePatterns: ["/node_modules/"], //carpetas donde no queremos hacer pruebas
+  collectCoverage: false, // genera resumen detallado
+  coverageDirectory: "coverage", // donde queremos que guarde el resumen
+};
