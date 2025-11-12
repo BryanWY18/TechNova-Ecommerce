@@ -49,10 +49,8 @@ describe('authGuard', () => {
     store.refreshState();
 
     const result = guard(null as any, null as any);
-    
+
     expect(result).toBe(false);
     expect(router.navigateByUrl).toHaveBeenCalled();
   })
-
-
 });
