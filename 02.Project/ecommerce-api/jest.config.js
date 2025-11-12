@@ -4,6 +4,6 @@ export default {
   moduleFileExtensions: ["js", "json"], //los archivos que queremos probar
   testMatch: ["**/__test__/**/*.test.js", "**/?(*.)+(spec|test).js"], //donde se encuentran nuestras pruebas
   testPathIgnorePatterns: ["/node_modules/"], //carpetas donde no queremos hacer pruebas
-  collectCoverage: false, // genera resumen detallado
+  collectCoverage: true, // genera resumen detallado
   coverageDirectory: "coverage", // donde queremos que guarde el resumen
 };
