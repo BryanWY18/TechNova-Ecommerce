@@ -9,15 +9,11 @@ describe("AuthController Prueba para el registro y login", () => {
     jest.clearAllMocks();
   });
 
-  // afterEach(()=>{
-
+  // afterEach(() => {
   // });
-
-  // afterAll(()=>{
-
+  // afterAll(() => {
   // });
-  // beforeAll(()=>{
-
+  // beforeAll(() => {
   // });
   describe("register, Registro de usuarios", () => {
     it("Deberia crear un nuevo usuario", async () => {
@@ -66,33 +62,35 @@ describe("AuthController Prueba para el registro y login", () => {
 
     it("deberia rechazar el registro si el email ya existe", async () => {
       const existingUser = {
-        displayName: "Usuario existente",
-        email: "exist@exist.com",
+        displayName: "Usuario Existente",
+        email: "existente@example.com",
         password: "password123",
-        phone: "1234567890",
+        phone: "9876543210",
       };
 
-      jest.spyOn(User, "findOne").mockRejectedValue({
-        _id: "userExisting123",
+      jest.spyOn(User, 'findOne').mockResolvedValue({
+        _id: 'existingUserId',
         email: existingUser.email,
-        displayName: existingUser.displayName,
+        displayName: existingUser.displayName
       });
-
-      const req = {
-        body: existingUser,
+       const req = {
+        body: existingUser
       };
+
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn()
       };
-
       const next = jest.fn();
 
       await register(req, res, next);
 
-      expect(User.findOne).toHaveBeenCalledWith({email: existingUser.email});
+      expect(User.findOne).toHaveBeenCalledWith({ email: existingUser.email });
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({message: 'User already exist'});
+      expect(res.json).toHaveBeenCalledWith({ 
+        message: 'User already exist' 
+      });
+      
       expect(next).not.toHaveBeenCalled();
     });
     })
