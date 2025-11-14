@@ -12,12 +12,9 @@ import {
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { FormFieldComponent } from '../../shared/form-field/form-field.component';
-<<<<<<< HEAD
-import { RouterLink } from "@angular/router";
-=======
 import * as AuthActions from '../../../core/store/auth/auth.actions';
 import { Store } from '@ngrx/store';
->>>>>>> 5eee051718b9e98ebefd551620a6024830c38ce3
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
