@@ -8,7 +8,7 @@ describe('authGuard', () => {
   let guard: CanActivateFn;
   let store: MockStore;
   let router: jasmine.SpyObj<Router>;
-
+  
   beforeEach(()=>{
     const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
@@ -49,10 +49,8 @@ describe('authGuard', () => {
     store.refreshState();
 
     const result = guard(null as any, null as any);
-    
+
     expect(result).toBe(false);
     expect(router.navigateByUrl).toHaveBeenCalled();
   })
-
-
 });

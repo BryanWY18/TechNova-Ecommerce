@@ -1,5 +1,7 @@
 <div
   class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+  data-cy="product-card"
+  [attr.data-cy-product-id]="product._id"
 >
   <div class="absolute"  *appOffer="product.offer">
     <span class="rounded-full p-4 bg-red-500 text-white text-sm absolute top-0 left-0 z-50 font-bold">
@@ -53,11 +55,12 @@
         routerLink=""
         [routerLink]="['/product-view', product._id]"
         class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        data-cy="view-product-btn"
       >
         Ver más
       </a>
       <button
-
+        data-cy="add-to-cart-btn"
         [disabled]="product.stock === 0"
         [class]="
           product.stock === 0
