@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
-    selector: 'ui-dropdown',
-    imports: [CommonModule, IconComponent],
-    templateUrl: './dropdown.component.html',
-    styleUrl: './dropdown.component.css'
+  selector: 'ui-dropdown',
+  standalone: true,
+  imports: [CommonModule, IconComponent],
+  templateUrl: './dropdown.component.html',
+  styleUrl: './dropdown.component.css'
 })
 export class DropdownComponent {
   @Input() menuClass = '';

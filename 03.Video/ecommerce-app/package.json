@@ -1,12 +1,18 @@
 {
   "name": "ecommerce-app",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "lint": "eslint \"src/**/*.{js,ts}\" --quiet",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "ng e2e",
+    "cypress:run": "cypress run",
+    "ci": "npm run lint && npm run test"
   },
   "private": true,
   "dependencies": {
@@ -32,13 +38,18 @@
     "@angular/cli": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
     "@types/jasmine": "~5.1.0",
-    "cypress": "^15.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "eslint": "^9.39.1",
+    "eslint-define-config": "^2.1.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "@eslint/eslintrc": "latest",
+    "@eslint/js": "latest"
   }
 }

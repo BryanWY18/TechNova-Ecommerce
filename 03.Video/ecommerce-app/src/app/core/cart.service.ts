@@ -18,7 +18,7 @@ export interface Cart {
 
 export interface CartResponse {
   message: string;
-  cart: Cart | null; // ✅ Permitir que cart sea null como en la API
+  cart: Cart | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,80 +33,59 @@ export class CartService {
   // Contador de items en el carrito
   public get itemCount(): number {
     const cart = this.cartSubject.value;
-    return (
-      cart?.products?.reduce((total, item) => total + item.quantity, 0) || 0
-    );
+    return cart?.products?.reduce((total, item) => total + item.quantity, 0) || 0;
   }
 
   /**
    * Obtener carrito del usuario actual
    */
   getCart(userId: string): Observable<CartResponse> {
-    return this.http
-      .get<CartResponse>(`${this.baseUrl}/cart/user/${userId}`)
-      .pipe(
-        tap((response) => {
-          // ✅ Manejar correctamente cuando cart es null
-          this.cartSubject.next(response.cart);
-          if (response.cart) {
-            console.log('✅ Carrito obtenido:', response.cart);
-          } else {
-            console.log('📭 No hay carrito para este usuario');
-          }
-        }),
-        catchError((error) => {
-          console.error('❌ Error obteniendo carrito:', error);
-          return throwError(() => new Error('No se pudo obtener el carrito'));
-        })
-      );
+    return this.http.get<CartResponse>(`${this.baseUrl}/cart/user/${userId}`).pipe(
+      tap((response) => {
+        // ✅ Manejar correctamente cuando cart es null
+        this.cartSubject.next(response.cart);
+        if (response.cart) {
+          console.log('✅ Carrito obtenido:', response.cart);
+        } else {
+          console.log('📭 No hay carrito para este usuario');
+        }
+      }),
+      catchError((error) => {
+        console.error('❌ Error obteniendo carrito:', error);
+        return throwError(() => new Error('No se pudo obtener el carrito'));
+      })
+    );
   }
 
   /**
    * Agregar producto al carrito
    */
-  addToCart(
-    userId: string,
-    productId: string,
-    quantity: number = 1
-  ): Observable<CartResponse> {
+  addToCart(userId: string, productId: string, quantity: number = 1): Observable<CartResponse> {
     const body = { userId, productId, quantity };
 
-    return this.http
-      .post<CartResponse>(`${this.baseUrl}/cart/add-product`, body)
-      .pipe(
-        tap((response) => {
-          this.cartSubject.next(response.cart);
-          console.log(`✅ Producto agregado al carrito: ${quantity}x`);
-        }),
-        catchError((error) => {
-          console.error('❌ Error agregando al carrito:', error);
-          // ✅ Mejor manejo de errores específicos de la API
-          const message =
-            error?.error?.message ||
-            error?.message ||
-            'No se pudo agregar al carrito';
-          return throwError(() => new Error(message));
-        })
-      );
+    return this.http.post<CartResponse>(`${this.baseUrl}/cart/add-product`, body).pipe(
+      tap((response) => {
+        this.cartSubject.next(response.cart);
+        console.log(`✅ Producto agregado al carrito: ${quantity}x`);
+      }),
+      catchError((error) => {
+        console.error('❌ Error agregando al carrito:', error);
+        // ✅ Mejor manejo de errores específicos de la API
+        const message = error?.error?.message || error?.message || 'No se pudo agregar al carrito';
+        return throwError(() => new Error(message));
+      })
+    );
   }
 
   /**
    * Actualizar cantidad de un producto
    */
-  updateQuantity(
-    cartId: string,
-    productId: string,
-    newQuantity: number
-  ): Observable<Cart> {
+  updateQuantity(cartId: string, productId: string, newQuantity: number): Observable<Cart> {
     const cart = this.cartSubject.value;
     if (!cart) throw new Error('No hay carrito activo');
 
     const updatedProducts = cart.products
-      .map((item) =>
-        item.product._id === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
+      .map((item) => (item.product._id === productId ? { ...item, quantity: newQuantity } : item))
       .filter((item) => item.quantity > 0); // Remover si quantity = 0
 
     const body = {
@@ -158,10 +137,7 @@ export class CartService {
   getTotalPrice(): number {
     const cart = this.cartSubject.value;
     return (
-      cart?.products?.reduce(
-        (total, item) => total + item.product.price * item.quantity,
-        0
-      ) || 0
+      cart?.products?.reduce((total, item) => total + item.product.price * item.quantity, 0) || 0
     );
   }
 }
