@@ -75,7 +75,4 @@ export class PaymentMethodsService {
       );
   }
 
-  updatePaymentMethod(data: UpdatePaymentMethod):Observable<PaymentMethod[]>{
-    return this.http.put(`${this.baseUrl}/${this.updatePaymentMethodData}`)
-  }
 }
