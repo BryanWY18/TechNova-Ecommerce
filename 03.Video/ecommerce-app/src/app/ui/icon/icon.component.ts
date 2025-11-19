@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 type IconName = 'search' | 'cart' | 'user' | 'menu' | 'chevron-down' | 'star' | 'heart' | 'sun' | 'moon';
 
 @Component({
-    selector: 'ui-icon',
-    imports: [CommonModule],
-    templateUrl: './icon.component.html',
-    styleUrl: './icon.component.css'
+  selector: 'ui-icon',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './icon.component.html',
+  styleUrl: './icon.component.css'
 })
 export class IconComponent {
   @Input() name: IconName = 'search';

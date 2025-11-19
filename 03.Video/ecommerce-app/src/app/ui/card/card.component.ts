@@ -2,10 +2,11 @@ import { Component, Input, AfterContentInit, ContentChildren, QueryList, Element
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'ui-card',
-    imports: [CommonModule],
-    templateUrl: './card.component.html',
-    styleUrl: './card.component.css'
+  selector: 'ui-card',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './card.component.html',
+  styleUrl: './card.component.css'
 })
 export class CardComponent implements AfterContentInit {
   @Input() variant: 'default' | 'elevated' | 'flat' | 'outline' = 'default';

@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Product, ProductService } from '../../core/product.service.js';
+import { ProductService, Product } from '../../core/product.service';
 
 @Component({
-    selector: 'app-search',
-    imports: [CommonModule],
-    templateUrl: './search.component.html',
-    styleUrl: './search.component.css'
+  selector: 'app-search',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.css'
 })
-
 export class SearchComponent implements OnInit {
   products: Product[] = [];
   loading = false;
@@ -21,13 +21,13 @@ export class SearchComponent implements OnInit {
     private productService: ProductService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['q'] || '';
       if (this.searchQuery) {
         this.searchProducts();
       }
-    })
+    });
   }
 
   searchProducts() {
