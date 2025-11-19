@@ -1,21 +1,22 @@
-import { Injectable, inject } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export type User = {
-  _id: string,
-  displayName: string,
-  email: string,
-  role: string,
-  avatar: string,
-  isActive: boolean,
-}
+  _id: string;
+  displayName: string;
+  email: string;
+  role: string;
+  avatar: string;
+  isActive: boolean;
+  __v?: number;
+};
 
 export type ProfileResponse = {
   message: string;
   user: User;
-}
+};
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -25,5 +26,4 @@ export class ProfileService {
   getProfile(): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(`${this.base}/users/profile`);
   }
-
 }

@@ -1,23 +1,24 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
-//import { ProductService } from '../../core/product.service';
+import { ProductService } from '../../core/product.service';
+import { User } from '../../core/profile.service';
 import { ThemeService } from '../../core/theme.service';
 import { UserStateService } from '../../core/user-state.service';
-import { User } from '../../core/profile.service';
-// NgRx Imports
+
+// NgRx Imports - Para el nuevo sistema de estado
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../store/auth/auth.actions';
 import { selectUser } from '../../store/auth/auth.selectors';
 
 // UI Components
-import { SearchBarComponent } from '../../ui/search-bar/search-bar.component';
-import { DropdownComponent } from '../../ui/dropdown/dropdown.component';
-import { CartButtonComponent } from '../../ui/cart-button/cart-button.component';
 import { ButtonComponent } from '../../ui/button/button.component';
+import { CartButtonComponent } from '../../ui/cart-button/cart-button.component';
+import { DropdownComponent } from '../../ui/dropdown/dropdown.component';
 import { IconComponent } from '../../ui/icon/icon.component';
+import { SearchBarComponent } from '../../ui/search-bar/search-bar.component';
 import { ThemeToggleComponent } from '../../ui/theme-toggle/theme-toggle.component';
 
 interface Category {
@@ -26,8 +27,11 @@ interface Category {
   description: string;
 }
 
+// Removemos la interfaz local y usamos la del ProfileService
+
 @Component({
   selector: 'app-layout',
+  standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -37,44 +41,56 @@ interface Category {
     CartButtonComponent,
     ButtonComponent,
     IconComponent,
-    ThemeToggleComponent
+    ThemeToggleComponent,
   ],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+  styleUrl: './layout.component.css',
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   searchQuery = '';
-  categories: Category[] = [{ _id: '12', name: 'Todo', description: 'Todo' }];
-  //user: User | null = null;
+  categories: Category[] = [];
+
+  // ❌ ANTES: Estado local del usuario
+  // user: User | null = null;
+
   showUserMenu = false;
   showCategoriesMenu = false;
   showMobileMenu = false;
 
+  // ❌ ANTES: Suscripción manual para cleanup
   private userSubscription: Subscription = new Subscription();
 
+  // ✅ DESPUÉS: Observable del usuario desde NgRx Store
+  // El template usará 'user$ | async' en lugar de 'user'
   user$: Observable<User | null>;
 
   constructor(
     private authService: AuthService,
-    //private productService: ProductService,
+    private productService: ProductService,
     private router: Router,
     private themeService: ThemeService,
+    // ⚠️ MANTENEMOS: UserStateService por compatibilidad (otros componentes pueden usarlo)
     private userStateService: UserStateService,
+    // AGREGAMOS: NgRx Store para el nuevo sistema
     private store: Store
   ) {
+    // ✅ INICIALIZAR: Observable del usuario desde NgRx Store después de la inyección
     this.user$ = this.store.select(selectUser);
   }
 
   ngOnInit() {
     // Initialize theme
     this.themeService.init();
-    //this.loadCategories();
+    this.loadCategories();
 
-    //Suscribirse al estado reactivo del usuario
-    //this.subscribeToUserState();
-    //Cargar el usuario inicial
-    //this.userStateService.loadUser();
+    // ❌ ANTES: Suscripción manual al UserStateService
+    // this.subscribeToUserState();
 
+    // ❌ ANTES: Cargar usuario con UserStateService
+    // this.userStateService.loadUser();
+
+    // ✅ DESPUÉS: Disparar acción NgRx para cargar usuario
+    // Esta acción activará el effect que hará la petición HTTP
     this.store.dispatch(AuthActions.loadUser());
 
     // Check initial screen size
@@ -82,8 +98,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Cleanup if needed
+    // ❌ ANTES: Cleanup suscripciones manuales
     // this.userSubscription.unsubscribe();
+    // ✅ DESPUÉS: No necesitamos cleanup manual
+    // El async pipe se encarga automáticamente de las suscripciones
   }
 
   @HostListener('window:resize', ['$event'])
@@ -107,36 +125,40 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   loadCategories() {
-    //  this.productService.getCategories().subscribe({
-    //    next: (categories) => {
-    //      this.categories = categories;
-    //    },
-    //    error: (error) => {
-    //      console.error('Error loading categories:', error);
-    //    }
-    //  });
+    this.productService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+      },
+    });
   }
 
-
   /**
-   * Suscribirse al estado reactivo del usuario
+   * ❌ ANTES: Suscripción manual al UserStateService
+   *
+   * Este método ya no es necesario porque usamos el async pipe en el template.
+   * El async pipe maneja automáticamente la suscripción y el cleanup.
    */
-  // private subscribeToUserState() {
-  //   this.userSubscription = this.userStateService.user$.subscribe({
-  //     next: (user) => {
-  //       this.user = user;
-  //       console.log('Estado del usuario actualizado en el Layout', user);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error en la suscripción del usuario', error);
-  //     }
-  //   })
-  // }
+  /*
+  private subscribeToUserState() {
+    this.userSubscription = this.userStateService.user$.subscribe({
+      next: (user) => {
+        this.user = user;
+        console.log('Estado del usuario actualizado en Layout:', user?.displayName || 'No autenticado');
+      },
+      error: (error) => {
+        console.error('Error en suscripción de usuario:', error);
+      }
+    });
+  }
+  */
 
   onSearch(query: string) {
     if (query.trim()) {
       this.router.navigate(['/search'], {
-        queryParams: { q: query }
+        queryParams: { q: query },
       });
     }
   }
@@ -157,9 +179,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    //this.authService.logout();
-    //this.userStateService.clearUser();
+    // ❌ ANTES: Lógica manual de logout
+    // this.authService.logout();
+    // this.userStateService.clearUser();
+
+    // ✅ DESPUÉS: Disparar acción de logout
+    // Esta acción limpiará el estado y ejecutará el AuthService.logout() en el effect
     this.store.dispatch(AuthActions.logout());
+
     this.showUserMenu = false;
     this.router.navigate(['/']);
   }

@@ -6,10 +6,11 @@ import { Product } from '../../core/product.service';
 export type GridVariant = 'default' | 'compact' | 'wide' | 'list' | 'masonry';
 
 @Component({
-    selector: 'ui-product-grid',
-    imports: [CommonModule, ProductCardSimpleComponent],
-    templateUrl: './product-grid.component.html',
-    styleUrl: './product-grid.component.css'
+  selector: 'ui-product-grid',
+  standalone: true,
+  imports: [CommonModule, ProductCardSimpleComponent],
+  templateUrl: './product-grid.component.html',
+  styleUrl: './product-grid.component.css'
 })
 export class ProductGridComponent implements OnInit, OnDestroy {
   @Input() products: Product[] = [];
