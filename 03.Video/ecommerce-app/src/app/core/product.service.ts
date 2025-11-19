@@ -29,8 +29,7 @@ export class ProductService {
   getAll() {
     return this.http.get<{ products: Product[] }>(`${this.base}/products`).pipe(
       catchError((err) => {
-        const msg =
-          err?.error?.message || 'No se pudieron obtener los productos';
+        const msg = err?.error?.message || 'No se pudieron obtener los productos';
         return throwError(() => new Error(msg));
       })
     );
@@ -46,23 +45,17 @@ export class ProductService {
   }
 
   getByCategory(categoryId: string) {
-    return this.http
-      .get<Product[]>(`${this.base}/products/category/${categoryId}`)
-      .pipe(
-        catchError((err) => {
-          const msg =
-            err?.error?.message ||
-            'No se pudieron obtener los productos de la categoría';
-          return throwError(() => new Error(msg));
-        })
-      );
+    return this.http.get<Product[]>(`${this.base}/products/category/${categoryId}`).pipe(
+      catchError((err) => {
+        const msg = err?.error?.message || 'No se pudieron obtener los productos de la categoría';
+        return throwError(() => new Error(msg));
+      })
+    );
   }
 
   search(query: string) {
     return this.http
-      .get<{ products: Product[] }>(
-        `${this.base}/products/search?q=${encodeURIComponent(query)}`
-      )
+      .get<{ products: Product[] }>(`${this.base}/products/search?q=${encodeURIComponent(query)}`)
       .pipe(
         catchError((err) => {
           const msg = err?.error?.message || 'No se pudieron buscar productos';
@@ -73,13 +66,10 @@ export class ProductService {
 
   getCategories() {
     return this.http
-      .get<{ _id: string; name: string; description: string }[]>(
-        `${this.base}/categories`
-      )
+      .get<{ _id: string; name: string; description: string }[]>(`${this.base}/categories`)
       .pipe(
         catchError((err) => {
-          const msg =
-            err?.error?.message || 'No se pudieron obtener las categorías';
+          const msg = err?.error?.message || 'No se pudieron obtener las categorías';
           return throwError(() => new Error(msg));
         })
       );

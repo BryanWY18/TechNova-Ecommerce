@@ -1,5 +1,3 @@
-import { intersection } from 'zod';
-
 describe('E2E: login and add a product to cart', () => {
   beforeEach(() => {
     cy.clearLocalStorage();

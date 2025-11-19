@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, Validators, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
-import { passwordStrength, matchPasswords } from '../../../shared/validators';
+import { matchPasswords, passwordStrength } from '../../../shared/validators';
 
+import { ButtonComponent } from '../../../ui/button/button.component';
 import { FormFieldComponent } from '../../../ui/form-field/form-field.component';
 import { InputComponent } from '../../../ui/input/input.component';
-import { ButtonComponent } from '../../../ui/button/button.component';
 
 type RegisterForm = FormGroup<{
   displayName: FormControl<string>;
@@ -18,10 +24,18 @@ type RegisterForm = FormGroup<{
 }>;
 
 @Component({
-    selector: 'app-register',
-    imports: [CommonModule, ReactiveFormsModule, FormFieldComponent, InputComponent, ButtonComponent, RouterModule],
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.css'
+  selector: 'app-register',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormFieldComponent,
+    InputComponent,
+    ButtonComponent,
+    RouterModule,
+  ],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   loading = false;
@@ -29,21 +43,17 @@ export class RegisterComponent {
   bannerKind: 'ok' | 'error' = 'ok';
   form: RegisterForm;
 
-  constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router
-  ) {
-    this.form = this.fb.nonNullable.group({
-      displayName: this.fb.nonNullable.control('', [Validators.required]),
-      email: this.fb.nonNullable.control(
-        '',
-        [Validators.required, Validators.email]
-      ),
-      password: this.fb.nonNullable.control('', [Validators.required, passwordStrength(6)]),
-      confirmar: this.fb.nonNullable.control('', [Validators.required]),
-      terminos: this.fb.nonNullable.control(false, [Validators.requiredTrue]),
-    }, { validators: [matchPasswords('password', 'confirmar')] });
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+    this.form = this.fb.nonNullable.group(
+      {
+        displayName: this.fb.nonNullable.control('', [Validators.required]),
+        email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
+        password: this.fb.nonNullable.control('', [Validators.required, passwordStrength(6)]),
+        confirmar: this.fb.nonNullable.control('', [Validators.required]),
+        terminos: this.fb.nonNullable.control(false, [Validators.requiredTrue]),
+      },
+      { validators: [matchPasswords('password', 'confirmar')] }
+    );
   }
 
   err(ctrl: keyof RegisterForm['controls']): string {
@@ -77,12 +87,12 @@ export class RegisterComponent {
       next: () => {
         this.loading = false;
         this.showBanner('ok', 'Registro exitoso. Ahora inicia sesión.');
-        setTimeout(() => this.router.navigateByUrl('/auth/login'), 1200);
+        setTimeout(() => this.router.navigateByUrl('/auth/login'), 2000);
       },
       error: (e: Error) => {
         this.loading = false;
         this.showBanner('error', e.message || 'No se pudo completar el registro.');
-      }
+      },
     });
   }
 }

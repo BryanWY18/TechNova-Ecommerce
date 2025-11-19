@@ -53,20 +53,28 @@
         <!-- Theme Toggle -->
         <ui-theme-toggle></ui-theme-toggle>
 
-        <!-- Botón de usuario -->
+        <!--
+        ✅ CAMBIO NgRx: Botón de usuario con Store
+        ANTES: @if (user) { ... } - acceso directo a propiedad
+        DESPUÉS: @if (user$ | async; as user) { ... } - suscripción con async pipe
+        -->
         <ui-dropdown menuClass="right" [isOpen]="showUserMenu" (openChange)="showUserMenu = $event">
 
           <div slot="trigger" class="user-info">
+            <!-- ✅ NgRx: Usamos async pipe para obtener el usuario del Store -->
             @if (user$ | async; as user) {
+            <!-- Usuario autenticado desde NgRx Store -->
             <span class="user-greeting">Hola, {{ user.displayName }}</span>
             <span class="user-account">Cuenta y Listas</span>
             } @else {
+            <!-- Usuario no autenticado -->
             <span class="user-greeting">Hola, Inicia sesión</span>
             <span class="user-account">Cuenta y Listas</span>
             }
           </div>
 
           <div slot="content" role="menu">
+            <!-- ✅ NgRx: Reutilizamos el mismo observable con async pipe -->
             @if (!(user$ | async)) {
             <!-- Usuario no logueado -->
             <div class="auth-section" role="group" aria-labelledby="auth-heading">
@@ -90,7 +98,7 @@
             }
 
             @if (user$ | async) {
-            <!-- Usuario logueado -->
+            <!-- ✅ NgRx: Usuario logueado (detectado por el Store) -->
             <div class="user-links">
               <a routerLink="/profile" class="dropdown-link" (click)="closeMenus()">Tu cuenta</a>
               <a href="#" class="dropdown-link">Tus pedidos</a>
@@ -154,14 +162,14 @@
 @if (showMobileMenu) {
 <nav class="mobile-menu active">
   <div class="mobile-menu-content">
-    <!-- User Section Mobile -->
+    <!-- ✅ NgRx: User Section Mobile -->
     <div class="mobile-user-section">
       @if (user$ | async; as user) {
       <div class="mobile-user-info">
         <span class="mobile-user-name">Hola, {{ user.displayName }}</span>
       </div>
       <div class="mobile-user-links">
-        <a routerLink="/profile" class="dropdown-link" (click)="closeMobileMenu()">Tu cuenta</a>
+        <a routerLink="/profile" class="mobile-menu-link" (click)="closeMobileMenu()">Tu cuenta</a>
         <a href="#" class="mobile-menu-link" (click)="closeMobileMenu()">Tus pedidos</a>
         <a href="#" class="mobile-menu-link" (click)="closeMobileMenu()">Lista de deseos</a>
         <ui-button variant="danger" (click)="logout(); closeMobileMenu()">

@@ -4,10 +4,11 @@ import { ThemeService } from '../../core/theme.service';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
-    selector: 'ui-theme-toggle',
-    imports: [CommonModule, IconComponent],
-    templateUrl: './theme-toggle.component.html',
-    styleUrl: './theme-toggle.component.css'
+  selector: 'ui-theme-toggle',
+  standalone: true,
+  imports: [CommonModule, IconComponent],
+  templateUrl: './theme-toggle.component.html',
+  styleUrl: './theme-toggle.component.css'
 })
 export class ThemeToggleComponent implements OnInit, OnDestroy {
   @Input() showLabel = false;

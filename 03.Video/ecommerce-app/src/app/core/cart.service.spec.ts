@@ -313,8 +313,8 @@ describe('CartService', () => {
       service['cartSubject'].next(mockCart);
 
       service.clearCart(cartId).subscribe({
-        next: response => {
-          // ✅ Cambio aquí: no verificar el response porque es void
+        next: () => {
+          // no verificar el response porque es void
           expect(service['cartSubject'].value).toBeNull();
         },
       });
@@ -395,5 +395,20 @@ describe('CartService', () => {
       service['cartSubject'].next(null);
       expect(cartValues[2]).toBeNull();
     });
+  });
+
+  it('should call getCart and handle response', (done) => {
+    const userId = 'user123';
+
+    service.getCart(userId).subscribe((res) => {
+      expect(res).toEqual(mockCartResponse);
+      // el servicio debe actualizar el estado interno del carrito
+      expect(service['cartSubject'].value).toEqual(mockCart);
+      done();
+    });
+
+    const req = httpMock.expectOne(`${environment.apiBase}/cart/user/${userId}`);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockCartResponse);
   });
 });
