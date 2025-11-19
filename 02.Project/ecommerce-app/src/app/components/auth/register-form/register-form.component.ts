@@ -65,7 +65,7 @@ export class RegisterFormComponent {
       required: true,
     },
     {
-      label: ' repetir contraseña',
+      label: 'repetir contraseña',
       fieldId: 'repeatPassword',
       type: 'password',
       placeholder: '*******',
