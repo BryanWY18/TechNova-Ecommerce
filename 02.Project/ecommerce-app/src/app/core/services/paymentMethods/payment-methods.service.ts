@@ -5,6 +5,7 @@ import {
   CreatePaymentMethod,
   PaymentMethod,
   PaymentMethodArraySchema,
+  UpdatePaymentMethod,
 } from '../../types/PaymentMethod';
 import { Store } from '@ngrx/store';
 import { selectUserId } from '../../store/auth/auth.selectors';
@@ -50,5 +51,9 @@ export class PaymentMethodsService {
     return this.http
       .post(this.baseUrl, payload)
       .pipe(switchMap(() => this.getPaymentMethodsByUser(user)));
+  }
+
+  updatePaymentMethod(data: UpdatePaymentMethod):Observable<PaymentMethod[]>{
+    return this.http.put(`${this.baseUrl}/${this.updatePaymentMethodData}`)
   }
 }

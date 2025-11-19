@@ -6,7 +6,7 @@ describe('E2E: login and add a product to cart',()=>{
 
     it('visit/login then status code 200, add to cart then status code 200',()=>{
         cy.intercept('POST','**/api/auth/login').as('loginRequest');
-        cy.intercept('GET','**/api/products').as('getProducts');
+        cy.intercept('GET','**/api/products*').as('getProducts');
         cy.intercept('POST','**/api/cart/add-product').as('addProduct');
 
         cy.visit('/login');
