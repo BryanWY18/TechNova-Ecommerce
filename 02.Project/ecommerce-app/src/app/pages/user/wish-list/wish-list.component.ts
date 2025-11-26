@@ -1,3 +1,5 @@
+
+/**
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, take } from 'rxjs';
 import { WishListService } from '../../../core/services/whishlist/wish-list.service';
@@ -14,7 +16,7 @@ import { RouterLink } from '@angular/router';
 export class WishListComponent implements OnInit {
   wishList$: Observable<Wishlist | null> = of(null);
   
-  /** 
+ 
   constructor(private wishListService: WishListService) {}
 
   ngOnInit(): void {
@@ -41,5 +43,6 @@ export class WishListComponent implements OnInit {
   cleanList() {
     this.wishListService.clearWishlist().pipe(take(1)).subscribe();
   }
-*/
 }
+
+*/

@@ -1,7 +1,8 @@
+<!--
 <div class="container mx-auto px-4 py-8">
   @if (wishList$ | async; as wishList ) {
 
-  <!-- Empty Cart -->
+  <!-- Empty Cart 
 
   @if (!wishList || wishList.products.length === 0) {
   <div class="text-center py-12">
@@ -69,14 +70,14 @@
             </div>
           </div>
 
-          <!-- Price -->
+          <!-- Price 
           <div class="text-right">
             <p class="text-sm text-gray-600">
               ${{ item.product.price || 0 | number : "1.2-2" }} c/u
             </p>
           </div>
 
-          <!-- Remove Button -->
+          <!-- Remove Button 
           <button
             (click)="removeFromList(item.product._id || '')"
             class="text-red-600 hover:text-red-800 transition-colors cursor-pointer"
@@ -99,7 +100,7 @@
       </div>
     </div>
 
-    <!-- Cart Summary -->
+    <!-- Cart Summary 
     <div class="bg-white rounded-lg shadow-sm p-6">
       <button
         routerLink="/products"
@@ -131,3 +132,4 @@
   }
 
 </div>
+-->
