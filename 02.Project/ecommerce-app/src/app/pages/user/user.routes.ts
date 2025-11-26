@@ -26,11 +26,6 @@ export const USER_ROUTES: Routes =[
         }
     },
     {
-        path: 'wishlist',
-        loadComponent: ()=> import('./wish-list/wish-list.component').then(c=>c.WishListComponent),
-        title: 'Lista de deseos',
-    },
-    {
         //user
         path: '',
         redirectTo: 'profile',
