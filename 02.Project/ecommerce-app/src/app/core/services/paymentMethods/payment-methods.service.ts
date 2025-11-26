@@ -9,12 +9,13 @@ import {
 } from '../../types/PaymentMethod';
 import { Store } from '@ngrx/store';
 import { selectUserId } from '../../store/auth/auth.selectors';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentMethodsService {
-  private readonly baseUrl = 'http://localhost:3000/api/payment-methods';
+  private readonly baseUrl = `${environment.BACK_URL}/payment-methods`;
   private paymentSubject = new BehaviorSubject<PaymentMethod[]>([]);
   private readonly payments$ = this.paymentSubject.asObservable();
 

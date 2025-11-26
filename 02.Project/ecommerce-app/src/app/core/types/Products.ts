@@ -11,13 +11,14 @@ export type Product = {
   imagesUrl: string[];
   category: Category;
 };
+
 export type ProductResponse = {
   products: Product[];
   pagination: {
     currentPage: number;
     hasNext: boolean;
     hasPrev: boolean;
-    totalPages: number;
+    totalPages: number; 
     totalResults: number;
   };
 };
@@ -31,3 +32,14 @@ export const cartProductSchema = z.object({
     stock: z.number(),
     category: z.string(),
 });
+
+export const wishProductSchema = z.object({
+    _id: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
+    price: z.number(),
+    imageUrl: z.string().optional(),
+    stock: z.number(),
+    category: z.string(),
+});
+

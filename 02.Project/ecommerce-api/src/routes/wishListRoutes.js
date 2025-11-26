@@ -9,15 +9,15 @@ import {
   checkProductInWishList,
   moveToCart
 } from '../controllers/wishListController.js';
-import authMiddleware from '../middlewares/auth.js'; // Middleware de autenticación
+import authMiddleware from '../middlewares/authMiddleware.js'; // Middleware de autenticación
 
 const router = express.Router();
 
 // Obtener la wishlist del usuario
-router.get('/', authMiddleware, getUserWishList);
+router.get('/wishlist', authMiddleware, getUserWishList);
 
 // Agregar producto a la wishlist
-router.post('/add', [
+router.post('/wishlist/add', [
   body('productId')
     .notEmpty().withMessage('Product ID is required')
     .isMongoId().withMessage('Product ID must be a valid MongoDB ObjectId')

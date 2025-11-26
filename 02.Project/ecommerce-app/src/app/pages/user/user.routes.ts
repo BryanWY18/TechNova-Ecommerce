@@ -31,7 +31,7 @@ export const USER_ROUTES: Routes =[
         title: 'Lista de deseos',
     },
     {
-                //user
+        //user
         path: '',
         redirectTo: 'profile',
         pathMatch: 'full',

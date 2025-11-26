@@ -16,9 +16,9 @@
             >
               <div class="flex flex-col sm:flex-row">
                 <div class="relative w-full sm:w-48 h-48 bg-gray-100 flex-shrink-0">
-                  @if (item.product.imagesUrl) {
+                  @if (item.product.imageUrl) {
                     <img
-                      [src]="item.product.imagesUrl[0]"
+                      [src]="item.product.imageUrl"
                       [alt]="item.product.name"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -140,7 +140,7 @@
               </div>
             </div>
 
-            <button class="w-full mt-6 bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200">
+            <button class="w-full mt-6 bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 ">
               Proceder al pago
             </button>
           </div>
