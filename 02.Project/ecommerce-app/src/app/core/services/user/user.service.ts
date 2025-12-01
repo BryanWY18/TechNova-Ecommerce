@@ -24,4 +24,18 @@ export class UserService {
       })
     )
   }
+
+  getUser(userId: string):Observable<User>{
+    return this.httpClient.get(`${this.baseUrl}/profile`).pipe(
+      map((data:any)=>{
+        const response = userSchema.safeParse(data.user);
+        if (!response.success) {
+          console.log(response.error)
+          throw new Error(`${response.error}`);
+        }
+        return response.data;
+      })
+    )
+  }
+
 }

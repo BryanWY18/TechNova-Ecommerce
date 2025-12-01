@@ -15,7 +15,7 @@ export const userResolver: ResolveFn<User | null> = (route, state) => {
 
   return store.select(selectUserId).pipe(
     switchMap((id) =>
-      userService.getUserById(id ?? '').pipe(
+      userService.getUser(id ?? '').pipe(
         catchError((error) => {
           console.log(error);
           toastService.error('No se puedieron cargar los datos del usuario');

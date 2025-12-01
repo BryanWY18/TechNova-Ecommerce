@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
+
 import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
   CreatePaymentMethod,
+  DeletePaymentMethod,
   PaymentMethod,
   PaymentMethodArraySchema,
   UpdatePaymentMethod,
@@ -10,6 +12,8 @@ import {
 import { Store } from '@ngrx/store';
 import { selectUserId } from '../../store/auth/auth.selectors';
 import { environment } from '../../../../environments/environment';
+import { ToastService } from '../toast/toast.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +23,9 @@ export class PaymentMethodsService {
   private paymentSubject = new BehaviorSubject<PaymentMethod[]>([]);
   private readonly payments$ = this.paymentSubject.asObservable();
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private http: HttpClient, private store: Store, private toast: ToastService,
+) {}
+
   getUserId(): string {
     let userId = '';
     this.store
@@ -76,4 +82,15 @@ export class PaymentMethodsService {
       );
   }
 
+  deletePaymentMethod(paymentId: string): Observable<PaymentMethod[]>{
+    const user = this.getUserId();
+;    return this.http.delete(`${this.baseUrl}/${paymentId}`).pipe(
+      switchMap(
+        () => this.getPaymentMethodsByUser(user)),
+        tap((updatedData) => {
+          this.paymentSubject.next(updatedData);
+          this.toast.success('Método de pago eliminado');
+        })
+    );
+  }
 }

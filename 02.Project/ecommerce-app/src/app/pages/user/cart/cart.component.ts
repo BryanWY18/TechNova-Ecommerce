@@ -16,6 +16,7 @@ export class CartComponent implements OnInit {
   cart$: Observable<Cart | null> = of(null);
   cartTotal$: Observable<number> = of(0);
   cartItemCount$: Observable<number> = of(0);
+
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
@@ -23,6 +24,7 @@ export class CartComponent implements OnInit {
     this.cartTotal$ = this.cartService.getCartTotal();
     this.cartItemCount$ = this.cartService.getItemCount();
   }
+  
   removeFromCart(productId: string) {
     this.cartService.removeFromCart(productId).subscribe();
   }

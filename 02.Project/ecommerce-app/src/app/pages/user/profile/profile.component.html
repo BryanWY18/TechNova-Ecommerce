@@ -97,7 +97,7 @@
           <div>
             <p class="text-sm text-gray-600 font-medium">Teléfono</p>
             <p class="text-gray-900 mt-1">
-              {{ user.phone || "No especificado" }}
+              *** *** {{ user.phone?.slice(-4) || "No especificado" }}
             </p>
           </div>
         </div>

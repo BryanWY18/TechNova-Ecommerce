@@ -28,7 +28,6 @@ export const PaymentMethodSchema = z.object({
 });
 
 export const PaymentMethodArraySchema = z.array(PaymentMethodSchema);
-
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
 
 export const CreatePaymentMethodSchema = PaymentMethodSchema.omit({_id: true})
@@ -36,3 +35,6 @@ export type CreatePaymentMethod = z.infer<typeof CreatePaymentMethodSchema>;
 
 export const UpdatePaymentMethodSchema = PaymentMethodSchema.partial().required({_id: true});
 export type UpdatePaymentMethod = z.infer<typeof UpdatePaymentMethodSchema>;
+
+export const DeletePaymentMethodSchema = PaymentMethodSchema.required({_id:true});
+export type DeletePaymentMethod = z.infer<typeof DeletePaymentMethodSchema>;
