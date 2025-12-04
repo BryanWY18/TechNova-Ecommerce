@@ -27,10 +27,11 @@ const shippingAddressSchema = new mongoose.Schema({
     trim: true,
   },
   postalCode: {
-    type: Number,
+    type: String,
     required: true,
-    min: 4,
-    max: 6,
+    minlength: 4,
+    maxlength: 6,
+    match: [/^\d+$/, 'El código postal solo debe contener dígitos.'],
     trim: true,
   },
   country: {

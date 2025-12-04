@@ -26,10 +26,14 @@ export const USER_ROUTES: Routes =[
         }
     },
     {
+        path:'checkout',
+        loadComponent:()=> import('./checkout/checkout.component').then(c=>c.CheckoutComponent),
+        title:'Checkout'    
+    },
+    {
         //user
         path: '',
         redirectTo: 'profile',
         pathMatch: 'full',
     }
-    
 ]

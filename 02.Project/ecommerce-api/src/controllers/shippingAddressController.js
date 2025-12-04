@@ -44,7 +44,7 @@ const getUserAddresses = async (req, res, next) => {
     const userId = req.user.userId;
 
     const addresses = await ShippingAddress.find({ user: userId })
-      .sort({ isDefault: -1, _id: -1 }); // Default primero, luego más recientes
+      //.sort({ isDefault: -1, _id: -1 }); // Default primero, luego más recientes
 
     res.status(200).json({
       message: 'Addresses retrieved successfully',

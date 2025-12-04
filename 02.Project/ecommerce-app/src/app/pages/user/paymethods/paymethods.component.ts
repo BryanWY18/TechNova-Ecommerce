@@ -98,4 +98,13 @@ export class PaymethodsComponent implements OnInit {
     };
     return labels[type] || type;
   }
+
+  onSetDefault(paymentId:string): void{
+    this.paymentService.defaultPaymentMethod(paymentId).subscribe({
+      next:()=>{
+        this.loadPaymentMethods();
+      }
+    });
+  };
+  
 }

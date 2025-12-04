@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/user/profile/profile.component';
-import { USER_ROUTES } from './pages/user/user.routes';
+import { USER_ROUTES } from '../app/pages/user/user.routes';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { formGuard } from './core/guards/form/form.guard';
 
@@ -14,23 +14,23 @@ export const routes: Routes = [
       import('../app/pages/products/products.component').then(
         (c) => c.ProductsComponent
       ),
-    title: 'products',
+    title: 'Productos',
   },
   {
     path:'product-view/:id', 
     loadComponent: () => import('../app/pages/product-detail/product-detail.component').then(
       (c)=> c.ProductDetailComponent
     ),
-    title:'product details',
+    title:'Product Detail',
   },
   {
     path: 'register', loadComponent:()=> import('../app/pages/register/register.component').then(c=>c.RegisterComponent),
-    title: 'registro',
+    title: 'Registro',
     // canDeactivate: [formGuard,/*A, B, C */ ]
   },
   {
     path: 'login', loadComponent: ()=> import('../app/pages/login/login.component').then(c=>c.LoginComponent),
-    title: 'login',
+    title: 'Login',
     canDeactivate: [formGuard]
   },
   {

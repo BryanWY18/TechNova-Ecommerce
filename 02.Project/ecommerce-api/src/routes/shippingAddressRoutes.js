@@ -10,7 +10,7 @@ import {
   setDefaultAddress,
   deleteShippingAddress
 } from '../controllers/shippingAddressController.js';
-import authMiddleware from '../middlewares/auth.js'; // Middleware de autenticación
+import authMiddleware from '../middlewares/authMiddleware.js'; // Middleware de autenticación
 
 const router = express.Router();
 
@@ -66,13 +66,19 @@ const addressValidations = [
 ];
 
 // Crear una nueva dirección
-router.post('/', addressValidations, validate, authMiddleware, createShippingAddress);
+router.post('/shipping-address', addressValidations, validate, authMiddleware, createShippingAddress);
 
 // Obtener todas las direcciones del usuario
-router.get('/', authMiddleware, getUserAddresses);
+router.get('/shipping-address/user/:userId', authMiddleware, getUserAddresses);
 
 // Obtener la dirección por defecto
 router.get('/default', authMiddleware, getDefaultAddress);
+
+// Marcar dirección como default
+router.patch('/shipping-address/:addressId/default', [
+  param('addressId')
+    .isMongoId().withMessage('Address ID must be a valid MongoDB ObjectId')
+], validate, authMiddleware, setDefaultAddress);
 
 // Obtener una dirección específica
 router.get('/:addressId', [
@@ -86,12 +92,6 @@ router.put('/:addressId', [
     .isMongoId().withMessage('Address ID must be a valid MongoDB ObjectId'),
   ...addressValidations
 ], validate, authMiddleware, updateShippingAddress);
-
-// Marcar dirección como default
-router.patch('/:addressId/default', [
-  param('addressId')
-    .isMongoId().withMessage('Address ID must be a valid MongoDB ObjectId')
-], validate, authMiddleware, setDefaultAddress);
 
 // Eliminar una dirección
 router.delete('/:addressId', [

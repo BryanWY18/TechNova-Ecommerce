@@ -35,6 +35,3 @@ export type CreatePaymentMethod = z.infer<typeof CreatePaymentMethodSchema>;
 
 export const UpdatePaymentMethodSchema = PaymentMethodSchema.partial().required({_id: true});
 export type UpdatePaymentMethod = z.infer<typeof UpdatePaymentMethodSchema>;
-
-export const DeletePaymentMethodSchema = PaymentMethodSchema.required({_id:true});
-export type DeletePaymentMethod = z.infer<typeof DeletePaymentMethodSchema>;

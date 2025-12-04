@@ -1,52 +1,86 @@
-<div class="min-h-screen bg-gray-50 flex sm:px-6 lg:px-8">
+<app-shipping-form (ShippingAddressSaved)="onShippingSaved($event)"></app-shipping-form>
 
-  <div class="relative z-10 max-w-md w-full space-y-8">
-    <form
-      (ngSubmit)="handleSubmit()"
-      [formGroup]="registerForm"
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+  <div class="bg-white border rounded-lg p-6 transition-shadow duration-300 hover:shadow-lg"
+    [class.border-green-500]="address.isDefault"
+    [class.border-2]="address.isDefault"
+    [class.border-gray-200]="!address.isDefault"
+    *ngFor="let address of shippingAddresses$ | async"
+    [class.default]="address.isDefault">
+    
+    <div class="flex items-center justify-between gap-2 mb-4 flex-wrap">
+      <h4 class="text-xl font-semibold text-gray-800">
+        <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        {{ address.city || 'Dirección' }}
+      </h4>
+      
+      <label *ngIf="((shippingAddresses$ | async)?.length || 0) >= 2">
+        <input type="radio" class="w-6 h-6 cursor-pointer"
+          name="defaultAddress" 
+          [checked]="address.isDefault"
+          (change)="onSetDefault(address._id)">
+      </label>
+      
+      <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold" 
+        *ngIf="address.isDefault">
+        Predeterminada
+      </span>
 
-    >
-      <div>
-        <h2 class="text-3xl font-bold text-gray-900 mb-6 ">Dirección de Envío</h2>
+    <div class="mb-4 space-y-2">  
+      <div *ngIf="address.address" class="flex">
+        <span class="font-semibold text-gray-600 min-w-[80px]">Dirección:</span>
+        <span class="text-gray-800">{{ address.address }}</span>
       </div>
-
-      <div class="space-y-5"></div>
-
-      @for (field of fields; track $index) {
-      <app-form-field
-        [label]="field.label"
-        [fieldId]="field.fieldId"
-        [type]="field.type"
-        [placeholder]="field.placeholder"
-        [required]="field.required"
-        [errorMessage]="getErrorMessage(field.fieldId)"
-        [formControlName]="field.fieldId"
-      ></app-form-field>
-      }
-
-
-      <button
-        type="submit"
-        [disabled]="!registerForm.valid"
-        class="w-full bg-blue-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all duration-200 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-200"
-      >
-        <span class="flex items-center justify-center gap-2">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-          Añadir Dirección
+      
+      <div *ngIf="address.city || address.state" class="flex">
+        <span class="font-semibold text-gray-600 min-w-[80px]">Ciudad:</span>
+        <span class="text-gray-800">
+          {{ address.city }}{{ address.state ? ', ' + address.state : '' }}
         </span>
+      </div>
+      
+      <div *ngIf="address.postalCode" class="flex">
+        <span class="font-semibold text-gray-600 min-w-[80px]">C.P.:</span>
+        <span class="text-gray-800">{{ address.postalCode }}</span>
+      </div>
+      
+      <div *ngIf="address.country" class="flex">
+        <span class="font-semibold text-gray-600 min-w-[80px]">País:</span>
+        <span class="text-gray-800">{{ address.country }}</span>
+      </div>
+      
+      <div *ngIf="address.phone" class="flex">
+        <span class="font-semibold text-gray-600 min-w-[80px]">Teléfono:</span>
+        <span class="text-gray-800">{{ address.phone }}</span>
+      </div>
+    </div>
+
+    <div class="flex gap-2 mt-4 pt-4 border-t border-gray-200">
+      <button class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded transition-colors duration-300 cursor-pointer"
+        (click)="onEdit(address)">
+        Editar
       </button>
-    </form>
+      <button class="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded transition-colors duration-300 cursor-pointer"
+        (click)="onDelete(address._id)">
+        Eliminar
+      </button>
+    </div>
   </div>
+
+  <div class="col-span-full text-center py-12 bg-gray-50 rounded-lg" 
+    *ngIf="(shippingAddresses$ | async)?.length === 0">
+    <svg class="mx-auto w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+    <p class="text-gray-600 mb-4 text-lg">
+      No tienes direcciones de envío registradas
+    </p>
 </div>

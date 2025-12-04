@@ -35,7 +35,7 @@ export class RegisterFormComponent {
       fieldId: 'displayName',
       type: 'text',
       placeholder: 'Nombre',
-      required: true,
+      required: true, 
     },
     {
       label: 'fecha de nacimiento',

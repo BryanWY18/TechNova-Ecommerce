@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
   CreatePaymentMethod,
-  DeletePaymentMethod,
   PaymentMethod,
   PaymentMethodArraySchema,
   UpdatePaymentMethod,
@@ -69,11 +68,7 @@ export class PaymentMethodsService {
     updatedPaymentmethodData: UpdatePaymentMethod
   ): Observable<PaymentMethod[]> {
     const userId = this.getUserId();
-    return this.http
-      .put(
-        `${this.baseUrl}/${updatedPaymentmethodData._id}`,
-        updatedPaymentmethodData
-      )
+    return this.http.put(`${this.baseUrl}/${updatedPaymentmethodData._id}`,updatedPaymentmethodData)
       .pipe(
         switchMap(() => this.getPaymentMethodsByUser(userId)),
         tap((updatedData) => {
@@ -91,6 +86,17 @@ export class PaymentMethodsService {
           this.paymentSubject.next(updatedData);
           this.toast.success('Método de pago eliminado');
         })
+    );
+  }
+
+  defaultPaymentMethod(paymentId:string): Observable<PaymentMethod[]>{
+    const userId = this.getUserId();
+    return this.http.patch(`${this.baseUrl}/${paymentId}/set-default`,{}).pipe(
+      switchMap(() => this.getPaymentMethodsByUser(userId)),
+      tap((updatedData) => {
+        this.paymentSubject.next(updatedData);
+        this.toast.success('Método de pago predeterminado actualizado');
+      })
     );
   }
 }

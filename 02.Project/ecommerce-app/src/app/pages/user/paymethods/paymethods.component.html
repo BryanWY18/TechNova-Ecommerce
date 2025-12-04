@@ -1,29 +1,50 @@
 <app-payment-form (paymentSaved)="onPaymentSaved($event)"></app-payment-form>
 
- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div *ngIf="paymentMethods$ | async as payments" >
+
+  <div class="col-span-full text-center py-12 bg-gray-50 rounded-lg" 
+    *ngIf="payments.length === 0">
+      <p class="text-gray-600 mb-4 text-lg" >
+        No tienes métodos de pago registrados</p>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-300"
+      (click)="onAddNew()">
+        Agregar tu primer método de pago
+      </button>
+  </div>
+
+
+  <div
+    *ngIf="payments.length > 0" 
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div class="bg-white border rounded-lg p-6 transition-shadow duration-300 hover:shadow-lg"
+      *ngFor="let payment of payments"
       [class.border-green-500]="payment.isDefault"
       [class.border-2]="payment.isDefault"
       [class.border-gray-200]="!payment.isDefault"
       [class.opacity-60]="!payment.isActive"
       [class.bg-gray-50]="!payment.isActive"
-         *ngFor="let payment of paymentMethods$ | async"
-         [class.default]="payment.isDefault"
-         [class.inactive]="!payment.isActive">
+      [class.default]="payment.isDefault"
+      [class.inactive]="!payment.isActive">
       
-      <div class="flex items-center gap-2 mb-4 flex-wrap">
+      <div class="flex items-center justify-between gap-2 mb-4 flex-wrap">
         <h4 class="text-xl font-semibold text-gray-800">{{ getPaymentTypeLabel(payment.type) }}</h4>
-        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold" 
-        *ngIf="payment.isDefault">
-            Predeterminado
-        </span>
-        <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-semibold" 
-        *ngIf="!payment.isActive">
-            Inactivo
-        </span>
+        <label *ngIf="payments.length >= 2">
+          <input type="radio" class="w-6 h-6 cursor-pointer"
+          name="defaultPayment" 
+          [checked]="payment.isDefault"
+          (change)="onSetDefault(payment._id)">
+        </label>
+          <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold" 
+          *ngIf="payment.isDefault">
+              Predeterminado
+          </span>
+        
+          <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-semibold" 
+          *ngIf="!payment.isActive">
+              Inactivo
+          </span>
       </div>
-
-      <div class="mb-4 space-y-2">
+      <div class="mb-4 space-y-2">  
         <div *ngIf="payment.cardNumber" class="flex">
           <span class="font-semibold text-gray-600 min-w-[80px]">Tarjeta:</span>
           <span class="text-gray-800">**** **** **** {{ payment.cardNumber.slice(-4) }}</span>
@@ -52,13 +73,6 @@
       </div>
     </div>
 
-    <div class="col-span-full text-center py-12 bg-gray-50 rounded-lg" 
-    *ngIf="(paymentMethods$ | async)?.length === 0">
-      <p class="text-gray-600 mb-4 text-lg" >
-        No tienes métodos de pago registrados</p>
-      <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-300"
-      (click)="onAddNew()">
-        Agregar tu primer método de pago
-      </button>
-    </div>
+
   </div>
+</div>
