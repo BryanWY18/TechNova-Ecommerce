@@ -31,6 +31,7 @@ async function getProducts(req, res) {
     next(error);
   }
 }
+
 async function getProductById(req, res) {
   try {
     const id = req.params.id;

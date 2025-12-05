@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import {
   CreateShippingAddress,
   ShippingAddress,
@@ -138,7 +138,11 @@ export class ShippingAddressService {
    * Obtiene la dirección predeterminada del usuario
    */
   getDefaultAddress(): Observable<ShippingAddress | null> {
-    return this.shippingAddresses$.pipe(
+    const userId = this.getUserId();
+    if (!userId) {
+      return of(null);
+    }
+    return this.getShippingAddressesByUser(userId).pipe(
       map((addresses) => {
         const defaultAddress = addresses.find((addr) => addr.isDefault);
         return defaultAddress || null;

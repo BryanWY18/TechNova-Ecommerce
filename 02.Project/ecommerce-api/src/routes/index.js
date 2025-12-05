@@ -15,13 +15,13 @@ const router = express.Router();
 
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
+router.use(productRoutes);
 router.use(cartRoutes);
 router.use(categoryRoutes);
 router.use(notificationRoutes);
 router.use(orderRoutes);
 router.use(paymentMethodRoutes);
 router.use(shippingAddressRoutes);
-router.use(productRoutes);
 router.use(wishListRoutes);
 
 

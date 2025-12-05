@@ -31,6 +31,11 @@ export const USER_ROUTES: Routes =[
         title:'Checkout'    
     },
     {
+        path:'order',
+        loadComponent:()=> import('./order/order.component').then(c=>c.OrderComponent),
+        title:'Order'
+    },
+    {
         //user
         path: '',
         redirectTo: 'profile',

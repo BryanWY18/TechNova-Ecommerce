@@ -99,4 +99,15 @@ export class PaymentMethodsService {
       })
     );
   }
+
+  getDefaultPaymentMethod(): Observable<PaymentMethod | null> {
+  const userId = this.getUserId();
+  return this.getPaymentMethodsByUser(userId).pipe(
+    map((paymentMethods: PaymentMethod[]) => {
+      const defaultMethod = paymentMethods.find(pm => pm.isDefault === true);
+      return defaultMethod || null;
+    })
+  );
+}
+
 }

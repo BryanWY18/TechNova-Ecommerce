@@ -39,6 +39,7 @@ export class AsideComponent implements OnInit {
     { title: 'direcciones de envio', route: '/user/shipping_address' },
     { title: 'metodos de pago', route: '/user/paymethods' },
     { title: 'lista de deseos', route: '/user/wishlist' },
+    { title: 'mis pedidos', route: '/user/order' },
   ];
 
   notAuthRoutes: routeItem[] = [
