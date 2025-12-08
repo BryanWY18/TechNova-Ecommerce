@@ -23,6 +23,16 @@ export type ProductResponse = {
   };
 };
 
+export const productSchema = z.object({
+  _id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  price: z.number().positive(),
+  offer: z.number().min(0),
+  stock: z.number().int().nonnegative(),
+  imagesUrl: z.array(z.string()),
+});
+
 export const cartProductSchema = z.object({
     _id: z.string(),
     name: z.string(),
@@ -43,3 +53,4 @@ export const wishProductSchema = z.object({
     category: z.string(),
 });
 
+export const productArraySchema = z.array(productSchema);

@@ -58,7 +58,7 @@ async function createOrder(req, res) {
       products,
       shippingAddress,
       paymentMethod,
-      shippingCost = 0
+      shippingCost = 0  
     } = req.body;
 
     // Validaciones básicas

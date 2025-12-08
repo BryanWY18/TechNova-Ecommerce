@@ -129,7 +129,6 @@ export class CartService {
     return this.httpClient.delete(`${this.baseUrl}/${cartId}`).pipe(
       tap(()=>{
         this.cartSubject.next(null);
-        this.toast.success('Carrito eliminado');
       }),
       map(()=>null)
     );
@@ -156,7 +155,5 @@ export class CartService {
       })
     )
   }
-
   
-
 }

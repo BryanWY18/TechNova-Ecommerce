@@ -31,6 +31,11 @@ export const USER_ROUTES: Routes =[
         title:'Checkout'    
     },
     {
+        path:'wishlist',
+        loadComponent:()=> import('./wish-list/wish-list.component').then(c=>c.WishListComponent),
+        title:'Wish List'
+    },
+    {
         path:'order',
         loadComponent:()=> import('./order/order.component').then(c=>c.OrderComponent),
         title:'Order'

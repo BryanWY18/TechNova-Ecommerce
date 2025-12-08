@@ -35,7 +35,7 @@ export class ShippingAddressService {
   }
 
   /**
-   * GET /shipping-address/user/:userId - Obtiene todas las direcciones de un usuario
+   * GET Obtiene todas las direcciones de un usuario
    */
   getShippingAddressesByUser(userId: string): Observable<ShippingAddress[]> {
     return this.http.get(`${this.baseUrl}/user/${userId}`).pipe(
@@ -52,7 +52,7 @@ export class ShippingAddressService {
   }
 
   /**
-   * POST /shipping-address - Crea una nueva dirección de envío
+   POST Crea una nueva dirección de envío
    */
   createShippingAddress(data: CreateShippingAddress): Observable<ShippingAddress[]> {
     const user = this.getUserId();
@@ -70,7 +70,7 @@ export class ShippingAddressService {
   }
 
   /**
-   * PUT /shipping-address/:id - Actualiza una dirección de envío
+   Actualizar dirección de envío
    */
   updateShippingAddress(
     updatedAddressData: UpdateShippingAddressMethod
@@ -88,7 +88,7 @@ export class ShippingAddressService {
   }
 
   /**
-   * DELETE /shipping-address/:id - Elimina una dirección de envío
+    Elimina una dirección de envío
    */
   deleteShippingAddress(addressId: string): Observable<ShippingAddress[]> {
     const user = this.getUserId();
@@ -102,7 +102,7 @@ export class ShippingAddressService {
   }
 
   /**
-   * PATCH - Establece una dirección como predeterminada
+    PATCH - Establecer una dirección como predeterminada
    */
   setDefaultShippingAddress(addressId: string): Observable<ShippingAddress[]> {
     const userId = this.getUserId();
