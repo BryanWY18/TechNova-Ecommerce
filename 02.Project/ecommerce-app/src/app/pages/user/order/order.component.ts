@@ -4,10 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { OrderService } from '../../../core/services/order/order.service';
 import { Observable } from 'rxjs';
 import { Order } from '../../../core/types/Order';
+import { OrderSkeletonComponent } from "../../../components/shared/skeleton/order-skeleton/order-skeleton.component";
 
 @Component({
   selector: 'app-order',
-  imports: [CommonModule, RouterLink],
+  standalone: true,
+  imports: [CommonModule, RouterLink, OrderSkeletonComponent],
   templateUrl: './order.component.html',
   styleUrl: './order.component.css'
 })
@@ -19,6 +21,12 @@ export class OrderComponent implements OnInit {
 
   ngOnInit(){
     this.getOrders();
+  }
+
+  readonly internalSkeletonArray = Array(5).fill(0);
+
+  get skeletonArray(): number[] {
+    return this.internalSkeletonArray;
   }
 
   getOrders() {

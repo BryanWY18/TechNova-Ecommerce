@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth/auth.service';
-import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, Observable, of, switchMap } from 'rxjs';
 import { FormFieldComponent } from '../../shared/form-field/form-field.component';
 import * as AuthActions from '../../../core/store/auth/auth.actions';
 import { Store } from '@ngrx/store';
@@ -28,6 +28,7 @@ export class RegisterFormComponent {
 
   fb = inject(FormBuilder);
   registerForm: FormGroup;
+  isSubmited: boolean = false;
 
   fields = [
     {
@@ -183,9 +184,17 @@ export class RegisterFormComponent {
     return '';
   }
 
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.registerForm.pristine || this.isSubmited) {
+      return true;
+    }
+    return confirm('Tienes cambios sin guardar.\n¿Estás seguro de que quieres salir?');
+  }
+
   handleSubmit() {
     console.log(this.registerForm.value);
     // this.authService.register(this.registerForm.value);
     this.store.dispatch(AuthActions.register({userData:this.registerForm.value}));
+    this.isSubmited = true;
   }
 }

@@ -1,8 +1,11 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest} from '@jest/globals';
 
 import User from "../../models/user.js";
-import { register } from "../authController.js";
+import * as authController from "../authController.js";
+
+const { register, login } = authController;
 
 describe("AuthController Prueba para el registro y login", () => {
   beforeEach(() => {
@@ -60,7 +63,7 @@ describe("AuthController Prueba para el registro y login", () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    it("deberia rechazar el registro si el email ya existe", async () => {
+    it("Deberia rechazar el registro si el email ya existe", async () => {
       const existingUser = {
         displayName: "Usuario Existente",
         email: "existente@example.com",
@@ -93,7 +96,7 @@ describe("AuthController Prueba para el registro y login", () => {
       
       expect(next).not.toHaveBeenCalled();
     });
-    })
+  })
 /*    
     afterEach(()=>{
     });
@@ -102,18 +105,122 @@ describe("AuthController Prueba para el registro y login", () => {
     beforeAll(()=>{
     });
 */
-    describe('register, Registro de usuarios', ()=>{
-        it('Debería crear un nuevo usuario', async ()=>{
-            const mockUser = {
-                displayName:'userTest',
-                email:'test@test.com',
-                password:'password123',
-                phone:'1234567890',
-            };
-            
-            jest.spyOn(User,'findOne').mockResolvedValue(null);
-            jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword123');
-        })
-  // describe("login, login de los usuarios");
+  describe('login, Login de los usuarios', () => {
+    it('Debería loguear al usuario exitosamente', async () => {
+      const mockUser = {
+        email: 'test@test.com',
+        password: 'password123',
+      };
+
+      const mockUserFromDB = {
+        _id: 'user123',
+        displayName: 'Test User',
+        email: mockUser.email,
+        hashPassword: 'hashedPassword123',
+        role: 'guest',
+        phone: '1234567890',
+      };
+
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserFromDB);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+
+      const mockToken = 'mockJWTToken123';
+      const mockRefreshToken = { token: 'mockRefreshToken123',  userId: 'user123' };
+
+      jest.spyOn(authController, 'default').mockImplementation(() => {});
+      jest.spyOn(jwt, 'sign')
+        .mockReturnValueOnce(mockToken)
+        .mockReturnValueOnce(mockRefreshToken.token);
+
+      const req = {
+        body: mockUser,
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+
+      await login(req, res, next);
+
+      expect(User.findOne).toHaveBeenCalledWith({ email: mockUser.email });
+      expect(bcrypt.compare).toHaveBeenCalledWith(mockUser.password, mockUserFromDB.hashPassword);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        token: mockToken,
+        refreshToken: mockRefreshToken.token,
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('Debería rechazar el login si el usuario no existe', async () => {
+      const noExistingUser = {
+        email: 'noexiste@example.com',
+        password: 'password123',
+      };
+
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+
+      const req = {
+        body: noExistingUser,
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+
+      await login(req, res, next);
+
+      expect(User.findOne).toHaveBeenCalledWith({ email: noExistingUser.email });
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'User does not exist. You must to sign in',
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('Debería rechazar el login si las credenciales no son válidas', async () => {
+      const userWithWrongPassword = {
+        email: 'existente@example.com',
+        password: 'wrongPassword',
+      };
+
+      const mockUserFromDB = {
+        _id: 'existingUserId',
+        email: userWithWrongPassword.email,
+        displayName: 'Usuario Existente',
+        hashPassword: 'hashedPassword123',
+        role: 'guest',
+      };
+
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserFromDB);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
+
+      const req = {
+        body: userWithWrongPassword,
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const next = jest.fn();
+
+      await login(req, res, next);
+
+      expect(User.findOne).toHaveBeenCalledWith({ email: userWithWrongPassword.email });
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        userWithWrongPassword.password,
+        mockUserFromDB.hashPassword
+      );
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Invalid credentials',
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
     })
 });

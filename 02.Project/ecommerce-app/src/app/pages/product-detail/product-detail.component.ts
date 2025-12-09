@@ -6,12 +6,13 @@ import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../core/services/cart/cart.service';
 import { Store } from '@ngrx/store';
 import { selectIsAuthenticated } from '../../core/store/auth/auth.selectors';
-//import { WishListService } from '../../core/services/whishlist/wish-list.service';
+import { DetailSkeletonComponent } from '../../components/shared/skeleton/detail-skeleton/detail-skeleton/detail-skeleton.component';
+import { WishListService } from '../../core/services/whishlist/wish-list.service';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe, RouterLink, DetailSkeletonComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -19,7 +20,7 @@ export class ProductDetailComponent implements OnInit{
   product: Product | null = null;
   isAuthenticated: boolean = false;
 
-  constructor(private productService: ProductsService, private route: ActivatedRoute, private cartService: CartService, private store: Store, private router: Router){}
+  constructor(private productService: ProductsService, private route: ActivatedRoute, private cartService: CartService, private store: Store, private router: Router, private wishListService: WishListService){}
 
   ngOnInit(): void {
     this.store.select(selectIsAuthenticated).subscribe({
@@ -66,5 +67,21 @@ export class ProductDetailComponent implements OnInit{
       });
     }
 
+  addToWishList(){
+      if (!this.isAuthenticated) {
+      this.router.navigateByUrl('/login');
+      return;
+      }
+      if(!this.product || !this.product._id){
+        return
+      }
+      this.loading = true
+      console.log(this.loading);
+      this.wishListService.addProductToWishlist(this.product._id).subscribe({
+        next:()=> this.loading = false,
+        error:()=> this.loading = false,
+      });
+  }      
+  
 
 }
