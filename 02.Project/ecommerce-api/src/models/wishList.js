@@ -13,10 +13,6 @@ const wishListSchema = new mongoose.Schema({
         ref: 'Product',
         required: true,
       },
-      addedAt: {
-        type: Date,
-        default: Date.now,
-      }
     }
   ],
 });

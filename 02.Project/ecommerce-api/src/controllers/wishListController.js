@@ -5,16 +5,13 @@ import Product from '../models/product.js';
 const getUserWishList = async (req, res, next) => {
   try {
     const userId = req.user.userId; // Asumiendo que tienes middleware de autenticación
-
     let wishList = await WishList.findOne({ user: userId })
-      .populate('products.product', 'name price images category inStock');
-
+      .populate('products.product', 'name price imageUrl category stock description');
     if (!wishList) {
       // Crear una wishlist vacía si no existe
       wishList = new WishList({ user: userId, products: [] });
       await wishList.save();
     }
-
     res.status(200).json({
       message: 'Wishlist retrieved successfully',
       count: wishList.products.length,
@@ -60,7 +57,10 @@ const addToWishList = async (req, res, next) => {
     }
 
     await wishList.save();
-    await wishList.populate('products.product', 'name price images category inStock');
+    await wishList.populate({
+      path: 'products.product',
+      select: 'name price imagesUrl category stock description'
+    });
 
     res.status(200).json({
       message: 'Product added to wishlist successfully',
@@ -96,7 +96,10 @@ const removeFromWishList = async (req, res, next) => {
     wishList.products.splice(productIndex, 1);
     await wishList.save();
 
-    await wishList.populate('products.product', 'name price images category inStock');
+    await wishList.populate({
+      path: 'products.product',
+      select: 'name price imagesUrl category stock description'
+    });
 
     res.status(200).json({
       message: 'Product removed from wishlist successfully',

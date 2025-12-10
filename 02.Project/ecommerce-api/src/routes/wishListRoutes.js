@@ -14,7 +14,7 @@ import authMiddleware from '../middlewares/authMiddleware.js'; // Middleware de 
 const router = express.Router();
 
 // Obtener la wishlist del usuario
-router.get('/wishlist', authMiddleware, getUserWishList);
+router.get('/wishlist/user', authMiddleware, getUserWishList);
 
 // Agregar producto a la wishlist
 router.post('/wishlist/add', [
@@ -30,19 +30,19 @@ router.get('/check/:productId', [
 ], validate, authMiddleware, checkProductInWishList);
 
 // Remover producto de la wishlist
-router.delete('/remove/:productId', [
+router.delete('/wishlist/remove/:productId', [
   param('productId')
     .isMongoId().withMessage('Product ID must be a valid MongoDB ObjectId')
 ], validate, authMiddleware, removeFromWishList);
 
 // Mover producto al carrito
-router.post('/move-to-cart', [
+router.post('/wishlist/move-to-cart', [
   body('productId')
     .notEmpty().withMessage('Product ID is required')
     .isMongoId().withMessage('Product ID must be a valid MongoDB ObjectId')
 ], validate, authMiddleware, moveToCart);
 
 // Limpiar toda la wishlist
-router.delete('/clear', authMiddleware, clearWishList);
+router.delete('/wishlist/clear', authMiddleware, clearWishList);
 
 export default router;

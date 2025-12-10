@@ -1,11 +1,14 @@
-describe('Register and login', () => {
+describe('Register, login and add to cart', () => {
   beforeEach(() => {
     cy.clearLocalStorage();
   });
 
-  it('should create an user 201, and login', () => {
+  it('should create an user 201, login, check products and add to cart', () => {
     cy.intercept('POST', '**/api/auth/register').as('registerRequest');
     cy.intercept('POST', '**/api/auth/login').as('logingRequest');
+    cy.intercept('GET', '**/api/products*').as('getProducts');
+    cy.intercept('POST', '**/api/cart/add-product*').as('addToCart');
+    cy.intercept('GET', '**/api/cart/user/**').as('getCart');
 
     const timestamp = Date.now();
     const emailTest = `cypress${timestamp}@example.com`;
@@ -48,5 +51,24 @@ describe('Register and login', () => {
         const token = win.localStorage.getItem('token');
         expect(token).to.not.be.null;
     });
+
+    cy.visit('/products');
+
+    cy.wait('@getProducts', { timeout: 10000 });
+
+    cy.get('[data-cy="product-card"]', { timeout: 10000 })
+      .should('have.length.at.least', 1)
+      .first()
+      .as('firstProduct');
+
+    cy.get('@firstProduct').find('[data-cy="add-to-cart-btn"]').click();
+    cy.wait('@addToCart', { timeout: 10000 }).then((interception) => {
+      expect(interception.response).not.to.be.undefined;
+      expect(interception.response!.statusCode).to.equal(200);
+    
+    cy.wait('@getCart', { timeout: 10000 });
+    });
+
+
   });
 });

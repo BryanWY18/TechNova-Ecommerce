@@ -22,9 +22,7 @@ export class ShippingAddressService {
 
   constructor( private http: HttpClient, private store: Store, private toast: ToastService) {}
 
-  /**
-   * Obtiene el ID del usuario autenticado desde el store
-   */
+  /** ID del usuario autenticado desde el store */
   getUserId(): string {
     let userId = '';
     this.store
@@ -34,9 +32,7 @@ export class ShippingAddressService {
     return userId;
   }
 
-  /**
-   * GET Obtiene todas las direcciones de un usuario
-   */
+  /** Todas las direcciones de un usuario */
   getShippingAddressesByUser(userId: string): Observable<ShippingAddress[]> {
     return this.http.get(`${this.baseUrl}/user/${userId}`).pipe(
       map((data: any) => {
@@ -46,7 +42,7 @@ export class ShippingAddressService {
           console.error('Shipping address validation error:', response.error);
           return [];
         }
-        return response.data;
+        return response.data; 
       })
     );
   }

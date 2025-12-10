@@ -1,11 +1,9 @@
-<div class="relative w-full min-h-screen overflow-hidden">
-    <img src="images-2/fondo-hexa.jpg" alt="" class="z-0 [clip-path:inset(0_0_15%_0)] blur-xs absolute inset-0 w-full h-400 object-cover">
-    <div class="absolute inset-0 bg-gray-500/50 z-10 "></div>
+<div class="relative w-full min-h-screen overflow-hidden bg-gray-400">
 
-    <h2 class="relative z-20 text-5xl text-shadow-2xs text-black text-center mt-10 font-semibold mb-10 ">Nuestros Productos</h2>
+    <h2 class="relative text-5xl text-shadow-2xs text-black text-center mt-10 font-semibold mb-10 ">Nuestros Productos</h2>
 
     <div
-    class="relative z-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 my-10 gap-3 md:gap-4 max-w-4xl mx-auto"
+    class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 my-10 gap-3 md:gap-4 max-w-4xl mx-auto"
     >
     @defer (on viewport; prefetch on hover) {
         @for (product of productResponse.products; track product._id) {

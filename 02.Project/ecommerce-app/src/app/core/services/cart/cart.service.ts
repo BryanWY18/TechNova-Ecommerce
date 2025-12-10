@@ -67,7 +67,6 @@ export class CartService {
       this.cartSubject.next(null);
       return;
     }
-
     this.getCartByUserId(id).subscribe({
       next: (cart)=>{
         this.cartSubject.next(cart);

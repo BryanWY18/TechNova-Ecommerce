@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, take } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { WishListService } from '../../../core/services/whishlist/wish-list.service';
 import { Wishlist } from '../../../core/types/WishList';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-wish-list',
@@ -12,34 +13,49 @@ import { RouterLink } from '@angular/router';
   styleUrl: './wish-list.component.css'
 })
 export class WishListComponent implements OnInit {
-
   wishList$: Observable<Wishlist | null> = of(null);
   
-  constructor(private wishListService: WishListService) {}
+  constructor(private wishListService: WishListService, private toast: ToastService) {}
 
   ngOnInit(): void {
+    this.loadWishlist();
+  }
 
+  loadWishlist() {
+    const userId = this.wishListService.getUserId();
+    this.wishList$ = this.wishListService.getWishlistByUserId(userId);
   }
   
   removeFromList(productId: string) {
-    this.wishListService.removeFromWishlist(productId).subscribe();
+    this.wishListService.removeFromWishlist(productId)
+      .subscribe({
+        next: () => this.loadWishlist(),
+        error: (err) => console.error('Error al eliminar:', err)
+      });
   }
 
-  // Verificar si el producto está agotado
-   
+  moveToCart(productId: string) {
+    this.toast.success('Producto movido al carrito')
+    this.wishListService.moveToCart(productId)
+      .subscribe({
+        next: () => this.loadWishlist(),
+        error: (err) => console.error('Error al mover al carrito:', err)
+      });
+  }
+
   isOutOfStock(stock: number): boolean {
     return stock === 0;
   }
 
-  
-  // Verificar si el stock es bajo
-  
   isLowStock(stock: number): boolean {
     return stock <= 5 && stock > 0;
   }
 
   cleanList() {
-    this.wishListService.clearWishlist().pipe(take(1)).subscribe();
+    this.wishListService.clearWishlist()
+      .subscribe({
+        next: () => this.loadWishlist(),
+        error: (err) => console.error('Error al limpiar:', err)
+      });
   }
-
 }

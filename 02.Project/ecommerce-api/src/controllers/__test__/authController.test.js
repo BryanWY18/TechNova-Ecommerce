@@ -93,7 +93,6 @@ describe("AuthController Prueba para el registro y login", () => {
       expect(res.json).toHaveBeenCalledWith({ 
         message: 'User already exist' 
       });
-      
       expect(next).not.toHaveBeenCalled();
     });
   })
@@ -127,7 +126,6 @@ describe("AuthController Prueba para el registro y login", () => {
       const mockToken = 'mockJWTToken123';
       const mockRefreshToken = { token: 'mockRefreshToken123',  userId: 'user123' };
 
-      jest.spyOn(authController, 'default').mockImplementation(() => {});
       jest.spyOn(jwt, 'sign')
         .mockReturnValueOnce(mockToken)
         .mockReturnValueOnce(mockRefreshToken.token);

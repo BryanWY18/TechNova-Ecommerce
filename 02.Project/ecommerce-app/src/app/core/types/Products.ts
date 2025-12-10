@@ -28,9 +28,10 @@ export const productSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number().positive(),
-  offer: z.number().min(0),
+  offer: z.number().min(0).optional(),
   stock: z.number().int().nonnegative(),
   imagesUrl: z.array(z.string()),
+  category: z.string(),
 });
 
 export const cartProductSchema = z.object({
@@ -46,11 +47,12 @@ export const cartProductSchema = z.object({
 export const wishProductSchema = z.object({
     _id: z.string(),
     name: z.string(),
-    description: z.string().optional(),
+    description: z.string(),
     price: z.number(),
     imageUrl: z.string().optional(),
-    stock: z.number(),
+    stock: z.number().int().nonnegative(),
     category: z.string(),
 });
 
 export const productArraySchema = z.array(productSchema);
+export const wishArraySchema = z.array(wishProductSchema);
