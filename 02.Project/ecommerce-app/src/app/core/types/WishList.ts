@@ -4,7 +4,7 @@ import { wishProductSchema } from './Products';
 // Schema para un item de producto en la wishlist
 export const wishlistProductItemSchema = z.object({
     product: wishProductSchema,
-    _id: z.string().optional() // MongoDB agrega _id a subdocumentos
+    _id: z.string().optional() // MongoDB agrega _id
 });
 
 // Schema para la wishlist completa

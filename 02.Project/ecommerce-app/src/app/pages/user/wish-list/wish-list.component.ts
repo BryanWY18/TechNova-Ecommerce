@@ -5,6 +5,7 @@ import { Wishlist } from '../../../core/types/WishList';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast/toast.service';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-wish-list',
@@ -15,7 +16,11 @@ import { ToastService } from '../../../core/services/toast/toast.service';
 export class WishListComponent implements OnInit {
   wishList$: Observable<Wishlist | null> = of(null);
   
-  constructor(private wishListService: WishListService, private toast: ToastService) {}
+  constructor(
+    private wishListService: WishListService, 
+    private toast: ToastService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.loadWishlist();
@@ -38,7 +43,10 @@ export class WishListComponent implements OnInit {
     this.toast.success('Producto movido al carrito')
     this.wishListService.moveToCart(productId)
       .subscribe({
-        next: () => this.loadWishlist(),
+        next: () => {
+          this.loadWishlist(),
+          this.cartService.loadUserCart();
+        },
         error: (err) => console.error('Error al mover al carrito:', err)
       });
   }
@@ -58,4 +66,5 @@ export class WishListComponent implements OnInit {
         error: (err) => console.error('Error al limpiar:', err)
       });
   }
+
 }

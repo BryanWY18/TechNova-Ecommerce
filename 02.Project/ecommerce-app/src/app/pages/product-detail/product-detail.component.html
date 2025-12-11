@@ -2,15 +2,17 @@
   <img src="images-2/fondo-hexa.jpg" alt="" class="z-0 [clip-path:inset(0_0_15%_0)] blur-xs fixed inset-0 w-full h-400 object-cover">
   @if ( product ){
 
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-4 sm:py-8">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+  <div class="
+    bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden
+    lg:min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 lg:py-4 sm:py-8">
+    <div class="lg:max-w-7xl lg:mx-auto px-3 lg:px-8 bg-gray-400">
       <div class="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/20 overflow-hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8">
-          <div class="space-y-3 sm:space-y-4">
+          <div class="lg:space-y-3 space-y-4">
             <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg sm:rounded-xl overflow-hidden shadow-md">
               @if (product.imagesUrl) {
                 <img
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  class="lg:w-full lg:h-full object-cover hover:scale-105 transition-transform duration-500"
                   [src]="product.imagesUrl[0]"
                   [alt]="product.name"
                 />
