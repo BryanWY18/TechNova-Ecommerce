@@ -14,15 +14,17 @@ export const PaymentMethodSchema = z.object({
   cardNumber: z
     .string()
     .regex(/^\d{16}$/)
-    .optional(),
+    .optional()
+    .or(z.literal("")), 
   cardHolderName: z.string().optional(),
   expiryDate: z.string().optional(),
   paypalEmail: z
     .string()
     .regex(/^\S+@\S+\.\S+$/)
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   bankName: z.string().optional(),
-  accountNumber: z.string().min(8).optional(),
+  accountNumber: z.string().min(8).optional().or(z.literal("")), 
   isDefault: z.boolean(),
   isActive: z.boolean(),
 });
